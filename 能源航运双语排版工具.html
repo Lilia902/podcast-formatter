@@ -1,3 +1,27 @@
+<!--
+  能源航运双语排版工具 — Energy & Shipping Bilingual Formatter
+  ===========================================================
+  Purpose : Format and translate energy/LNG/shipping industry articles
+            into a bilingual (English + Chinese) side-by-side layout.
+
+  Features:
+    - Paragraph-by-paragraph translation via MyMemory free API
+      (https://api.mymemory.translated.net)
+    - LNG/shipping keyword auto-highlighting
+    - Inline Chinese translation editing (contenteditable)
+    - Per-paragraph collapsible notes
+    - Reading mode (English-only view)
+    - Export to Word (.docx) using the inlined docx.js library
+
+  Usage   : Open in Chrome / Edge. Paste English text in the left panel,
+            click "翻译全文", review/edit in Preview tab, then export.
+
+  Dependencies:
+    - MyMemory Translation API (external fetch, requires internet)
+    - docx.js library (inlined in <script> section, no CDN needed)
+
+  No build step required — single self-contained HTML file.
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
