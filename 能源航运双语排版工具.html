@@ -356,7 +356,22 @@
     .para-row:hover { background: rgba(0,212,255,0.04); }
 
     .para-row td { padding: 12px 14px; vertical-align: top; }
-    .en-cell { color: #C8D8E8; line-height: 1.7; }
+    .en-cell {
+      color: #C8D8E8;
+      line-height: 1.7;
+      outline: none;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .en-cell:focus {
+      background: rgba(0,212,255,0.04);
+      box-shadow: inset 0 0 0 1px rgba(0,212,255,0.18);
+    }
+    .en-cell[data-placeholder]:empty::before {
+      content: attr(data-placeholder);
+      color: rgba(200,216,232,0.2);
+      font-style: italic;
+    }
     .zh-cell {
       color: #E8F4E8;
       line-height: 1.7;
@@ -418,6 +433,139 @@
       font-weight: 500;
     }
 
+    /* User annotation highlight */
+    .user-annot {
+      background: rgba(0,212,255,0.18);
+      color: #00D4FF;
+      border-radius: 2px;
+      padding: 0 2px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 1px dashed rgba(0,212,255,0.6);
+      position: relative;
+    }
+    .user-annot:hover::after {
+      content: attr(data-note);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0F2847;
+      border: 1px solid rgba(0,212,255,0.35);
+      color: #C8D8E8;
+      font-size: 11px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      white-space: nowrap;
+      max-width: 260px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      z-index: 200;
+      pointer-events: none;
+    }
+
+    /* Floating annotation popup */
+    #annot-popup {
+      position: fixed;
+      z-index: 9999;
+      background: #0F2847;
+      border: 1px solid rgba(0,212,255,0.4);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: none;
+      min-width: 220px;
+    }
+    #annot-popup.visible { display: block; }
+    #annot-popup .annot-word {
+      font-size: 12px;
+      color: #00D4FF;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    #annot-popup input {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 5px;
+      color: #C8D8E8;
+      font-size: 12px;
+      padding: 5px 8px;
+      outline: none;
+      margin-bottom: 7px;
+    }
+    #annot-popup input:focus { border-color: rgba(0,212,255,0.6); }
+    #annot-popup .annot-btns { display: flex; gap: 6px; }
+    #annot-popup .annot-save {
+      flex: 1;
+      background: rgba(0,212,255,0.15);
+      border: 1px solid rgba(0,212,255,0.4);
+      border-radius: 5px;
+      color: #00D4FF;
+      font-size: 11px;
+      padding: 4px 0;
+      cursor: pointer;
+    }
+    #annot-popup .annot-save:hover { background: rgba(0,212,255,0.25); }
+    #annot-popup .annot-del {
+      background: rgba(255,80,80,0.1);
+      border: 1px solid rgba(255,80,80,0.3);
+      border-radius: 5px;
+      color: #FF6B6B;
+      font-size: 11px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+    #annot-popup .annot-cancel {
+      background: rgba(200,216,232,0.06);
+      border: 1px solid rgba(200,216,232,0.15);
+      border-radius: 5px;
+      color: rgba(200,216,232,0.5);
+      font-size: 11px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+
+    /* Annotation summary section */
+    .annot-summary {
+      margin: 20px 16px 10px;
+      background: rgba(0,40,80,0.5);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .annot-summary-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00D4FF;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .annot-summary-list { display: flex; flex-direction: column; gap: 6px; }
+    .annot-summary-item {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-size: 12px;
+    }
+    .annot-summary-item .aw {
+      color: #00D4FF;
+      font-weight: 600;
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+    .annot-summary-item .an { color: #C8D8E8; }
+    .annot-summary-empty { color: rgba(200,216,232,0.3); font-size: 12px; font-style: italic; }
+
+    /* Source URL footer */
+    .preview-source-url {
+      margin: 12px 16px 20px;
+      font-size: 11px;
+      color: rgba(0,212,255,0.5);
+    }
+    .preview-source-url a { color: #00D4FF; text-decoration: underline; word-break: break-all; }
+
     /* Reading mode */
     body.reading-mode .zh-cell,
     body.reading-mode th:nth-child(2),
@@ -469,18 +617,15 @@
       </div>
       <div class="field-group">
         <div class="field-label">来源 Source</div>
-        <select id="art-source">
-          <option value="Platts">Platts</option>
-          <option value="TradeWinds">TradeWinds</option>
-          <option value="LNG World Shipping">LNG World Shipping</option>
-          <option value="Reuters">Reuters</option>
-          <option value="Bloomberg">Bloomberg</option>
-          <option value="Other">Other</option>
-        </select>
+        <input type="text" id="art-source" placeholder="e.g. Platts, TradeWinds, Reuters...">
       </div>
       <div class="field-group">
         <div class="field-label">日期 Date</div>
         <input type="date" id="art-date">
+      </div>
+      <div class="field-group">
+        <div class="field-label">来源链接 URL</div>
+        <input type="text" id="art-url" placeholder="https://...">
       </div>
     </div>
 
@@ -496,9 +641,6 @@
           <span class="val" id="stat-paras">0</span>
           <span class="lbl">段落</span>
         </div>
-      </div>
-      <div class="mt-8">
-        <button class="btn btn-secondary" onclick="loadExample()">📄 载入示例文章</button>
       </div>
     </div>
 
@@ -558,6 +700,17 @@
           <p style="color:rgba(200,216,232,0.4)">翻译完成后将在此显示双语对照预览</p>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Annotation popup -->
+  <div id="annot-popup">
+    <div class="annot-word" id="annot-popup-word"></div>
+    <input type="text" id="annot-popup-input" placeholder="添加备注/释义..." maxlength="200">
+    <div class="annot-btns">
+      <button class="annot-save" onclick="saveAnnotation()">✔ 保存</button>
+      <button class="annot-del" onclick="deleteAnnotation()" id="annot-del-btn" style="display:none">🗑</button>
+      <button class="annot-cancel" onclick="closeAnnotPopup()">✕</button>
     </div>
   </div>
 
@@ -23645,6 +23798,8 @@ var __async = (__this, __arguments, generator) => {
     let paragraphs = [];       // {en, zh, note}
     let translating = false;
     let readingMode = false;
+    let userAnnotations = {};  // key: word (lowercase), value: {word, note}
+    let _annotPending = null;  // { word, key } while popup is open
 
     const LNG_KEYWORDS = [
       'LNG','bunkering','liquefaction','FSRU','liquefied natural gas',
@@ -23680,23 +23835,7 @@ var __async = (__this, __arguments, generator) => {
       el.classList.toggle('visible', !!msg);
     }
 
-    // ===== LOAD EXAMPLE =====
-    function loadExample() {
-      document.getElementById('art-title').value = 'Global LNG Market Faces Tightening Supply as Demand Surges in Asia';
-      document.getElementById('art-source').value = 'LNG World Shipping';
-      document.getElementById('art-date').value = '2026-04-13';
-      document.getElementById('en-input').value =
-`The global liquefied natural gas (LNG) market is experiencing unprecedented pressure as Asian demand continues to surge while new supply projects face delays. Spot prices for LNG cargoes in Northeast Asia have climbed sharply, driven by increased imports from Japan, South Korea, and China as these nations seek to diversify energy sources away from pipeline natural gas.
-
-Several major bunkering hubs, including Singapore and Rotterdam, are reporting record volumes of LNG ship fuel deliveries. The maritime industry's transition away from conventional heavy fuel oil is accelerating, with more than 300 LNG-powered vessels now operating globally and hundreds more on order at shipyards across South Korea and China.
-
-Industry analysts at Wood Mackenzie forecast that LNG bunkering demand could reach 35 million tonnes per annum by 2030, representing a threefold increase from current levels. This growth trajectory is prompting energy majors including Shell, TotalEnergies, and BP to expand their marine LNG supply infrastructure at key ports along major shipping lanes.
-
-Supply constraints are emerging as a key concern. Several planned liquefaction projects in the United States Gulf Coast have faced permitting delays, while Australian export facilities continue to grapple with maintenance outages. Qatar's North Field expansion, the world's largest LNG project, remains on track but its incremental volumes will not reach markets until 2026 at the earliest.`;
-      updateStats();
-    }
-
-    // ===== KEYWORD HIGHLIGHTING =====
+        // ===== KEYWORD HIGHLIGHTING =====
     function highlightKeywords(text) {
       const escaped = text
         .replace(/&/g,'&amp;')
@@ -23709,8 +23848,100 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
         const re = new RegExp('(?<![\\w-])(' + kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')(?![\\w-])','gi');
         result = result.replace(re, '<span class="kw-highlight">$1</span>');
       }
+      // Apply user annotations (sorted by length desc to avoid partial-overlap issues)
+      const annotKeys = Object.keys(userAnnotations).sort((a,b) => b.length - a.length);
+      for (const key of annotKeys) {
+        const ann = userAnnotations[key];
+        const safeWord = ann.word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const safeNote = (ann.note || '').replace(/"/g,'&quot;');
+        const re = new RegExp('(?<![\\w-])(' + safeWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')(?![\\w-])','gi');
+        result = result.replace(re, `<span class="user-annot" data-key="${key}" data-note="${safeNote}" onclick="openAnnotPopupFromSpan(this,event)">$1</span>`);
+      }
       return result;
     }
+
+    // ===== ANNOTATION FEATURE =====
+    function openAnnotPopup(word, x, y) {
+      const key = word.toLowerCase();
+      const existing = userAnnotations[key];
+      _annotPending = { word: existing ? existing.word : word, key };
+      document.getElementById('annot-popup-word').textContent = '📌 ' + (existing ? existing.word : word);
+      const inp = document.getElementById('annot-popup-input');
+      inp.value = existing ? (existing.note || '') : '';
+      document.getElementById('annot-del-btn').style.display = existing ? 'inline-block' : 'none';
+      const popup = document.getElementById('annot-popup');
+      popup.classList.add('visible');
+      // Position popup near click
+      const pw = 240, ph = 100;
+      let px = x + 10, py = y + 10;
+      if (px + pw > window.innerWidth) px = x - pw - 10;
+      if (py + ph > window.innerHeight) py = y - ph - 10;
+      popup.style.left = px + 'px';
+      popup.style.top = py + 'px';
+      setTimeout(() => inp.focus(), 50);
+    }
+
+    function openAnnotPopupFromSpan(span, e) {
+      e.stopPropagation();
+      const key = span.dataset.key;
+      const word = userAnnotations[key] ? userAnnotations[key].word : span.innerText;
+      openAnnotPopup(word, e.clientX, e.clientY);
+    }
+
+    function saveAnnotation() {
+      if (!_annotPending) return;
+      const note = document.getElementById('annot-popup-input').value.trim();
+      if (note) {
+        userAnnotations[_annotPending.key] = { word: _annotPending.word, note };
+      } else {
+        delete userAnnotations[_annotPending.key];
+      }
+      closeAnnotPopup();
+      renderPreview();
+    }
+
+    function deleteAnnotation() {
+      if (_annotPending) delete userAnnotations[_annotPending.key];
+      closeAnnotPopup();
+      renderPreview();
+    }
+
+    function closeAnnotPopup() {
+      document.getElementById('annot-popup').classList.remove('visible');
+      _annotPending = null;
+    }
+
+    // Handle mouseup on English cells to detect word selection / single-word click
+    document.addEventListener('mouseup', function(e) {
+      // Only act if inside a preview en-cell
+      const cell = e.target.closest('.en-cell');
+      if (!cell) return;
+      // Don't trigger when clicking on an existing annotation span
+      if (e.target.classList.contains('user-annot')) return;
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      const selectedText = sel.toString().trim();
+      if (!selectedText || selectedText.length > 80 || /\n/.test(selectedText)) return;
+      // Only trigger if selection is within this cell
+      const range = sel.getRangeAt(0);
+      if (!cell.contains(range.commonAncestorContainer)) return;
+      openAnnotPopup(selectedText, e.clientX, e.clientY);
+      sel.removeAllRanges();
+    });
+
+    // Close popup when clicking outside
+    document.addEventListener('mousedown', function(e) {
+      const popup = document.getElementById('annot-popup');
+      if (popup.classList.contains('visible') && !popup.contains(e.target)) {
+        closeAnnotPopup();
+      }
+    });
+
+    // Enter key to save annotation
+    document.getElementById('annot-popup-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') saveAnnotation();
+      if (e.key === 'Escape') closeAnnotPopup();
+    });
 
     // ===== TRANSLATION =====
     async function translateParagraph(text) {
@@ -23757,12 +23988,13 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
       const title = document.getElementById('art-title').value || '(无标题)';
       const source = document.getElementById('art-source').value;
       const date = document.getElementById('art-date').value;
+      const artUrl = document.getElementById('art-url').value.trim();
 
       let html = `
         <div class="article-header glass-card">
-          <div class="art-title">${title}</div>
+          <div class="art-title">${escHtml(title)}</div>
           <div class="art-meta">
-            <span>📡 ${source}</span>
+            <span>📡 ${escHtml(source)}</span>
             <span>📅 ${date || '—'}</span>
             <span>📄 ${paragraphs.length} 段落</span>
           </div>
@@ -23770,9 +24002,9 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
         <table class="bilingual-table">
           <thead>
             <tr>
-              <th style="width:48%">🇬🇧 English Original</th>
-              <th style="width:48%">🇨🇳 中文翻译</th>
-              <th style="width:4%">📝</th>
+              <th style="width:47%">🇬🇧 English Original</th>
+              <th style="width:47%">🇨🇳 中文翻译</th>
+              <th style="width:6%">📝</th>
             </tr>
           </thead>
           <tbody id="preview-tbody">`;
@@ -23781,15 +24013,15 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
         const rowClass = i % 2 === 0 ? 'even' : 'odd';
         html += `
             <tr class="para-row ${rowClass}" data-idx="${i}">
-              <td class="en-cell">${highlightKeywords(p.en)}</td>
-              <td class="zh-cell" contenteditable="true" data-placeholder="点击编辑译文..." data-idx="${i}" oninput="onZhEdit(${i},this)">${p.zh || ''}</td>
+              <td class="en-cell" contenteditable="true" data-placeholder="Click to edit English..." data-idx="${i}" onblur="onEnEdit(${i},this)" spellcheck="false">${highlightKeywords(p.en)}</td>
+              <td class="zh-cell" contenteditable="true" data-placeholder="点击编辑译文..." data-idx="${i}" oninput="onZhEdit(${i},this)">${escHtml(p.zh || '')}</td>
               <td class="note-btn-cell">
                 <button class="note-btn" id="note-btn-${i}" onclick="toggleNote(${i})" title="添加备注">📝</button>
               </td>
             </tr>
             <tr class="note-row" id="note-row-${i}">
               <td colspan="3">
-                <textarea class="note-area" id="note-area-${i}" placeholder="在此输入备注、术语说明..." oninput="onNoteEdit(${i},this)">${p.note || ''}</textarea>
+                <textarea class="note-area" id="note-area-${i}" placeholder="在此输入备注、术语说明..." oninput="onNoteEdit(${i},this)">${escHtml(p.note || '')}</textarea>
               </td>
             </tr>`;
       });
@@ -23798,9 +24030,45 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
           </tbody>
         </table>`;
 
+      // Annotation summary
+      const annotEntries = Object.values(userAnnotations);
+      html += `<div class="annot-summary">
+        <div class="annot-summary-title">📚 词汇注释汇总 Word Annotations (${annotEntries.length})</div>
+        <div class="annot-summary-list">`;
+      if (annotEntries.length === 0) {
+        html += `<div class="annot-summary-empty">在预览区选中英文单词/短语即可添加注释</div>`;
+      } else {
+        annotEntries.forEach(a => {
+          html += `<div class="annot-summary-item">
+            <span class="aw">${escHtml(a.word)}</span>
+            <span class="an">${escHtml(a.note)}</span>
+          </div>`;
+        });
+      }
+      html += `</div></div>`;
+
+      // Source URL at end
+      if (artUrl) {
+        html += `<div class="preview-source-url">🔗 来源链接：<a href="${escAttr(artUrl)}" target="_blank" rel="noopener">${escHtml(artUrl)}</a></div>`;
+      }
+
       document.getElementById('preview-inner').innerHTML = html;
     }
 
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function escAttr(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function onEnEdit(idx, el) {
+      if (paragraphs[idx]) {
+        paragraphs[idx].en = el.innerText.trim();
+        // Re-apply highlights on blur without resetting cursor
+        el.innerHTML = highlightKeywords(paragraphs[idx].en);
+      }
+    }
     function onZhEdit(idx, el) {
       if (paragraphs[idx]) paragraphs[idx].zh = el.innerText;
     }
@@ -23844,6 +24112,7 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
         const title = document.getElementById('art-title').value || '双语文章';
         const source = document.getElementById('art-source').value;
         const date = document.getElementById('art-date').value;
+        const artUrl = document.getElementById('art-url').value.trim();
         const inclNotes = document.getElementById('chk-notes').checked;
         const inclKw = document.getElementById('chk-keywords').checked;
 
@@ -23944,6 +24213,37 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
           }
         }
 
+        // User annotation summary section
+        const annotParagraphs = [];
+        const annotEntries = Object.values(userAnnotations);
+        if (annotEntries.length > 0) {
+          annotParagraphs.push(new docx.Paragraph({
+            children: [new docx.TextRun({ text: '词汇注释汇总 Word Annotations', bold: true, size: 24, font: 'Microsoft YaHei', color: '006644' })],
+            spacing: { before: 320, after: 120 }
+          }));
+          for (const ann of annotEntries) {
+            annotParagraphs.push(new docx.Paragraph({
+              children: [
+                new docx.TextRun({ text: ann.word + ': ', bold: true, size: 20, font: 'Calibri', color: '007755' }),
+                new docx.TextRun({ text: ann.note, size: 20, font: 'Microsoft YaHei', color: '333333' })
+              ],
+              spacing: { before: 40, after: 40 }
+            }));
+          }
+        }
+
+        // Source URL paragraph
+        const urlParagraphs = [];
+        if (artUrl) {
+          urlParagraphs.push(new docx.Paragraph({
+            children: [
+              new docx.TextRun({ text: '来源链接：', size: 18, font: 'Microsoft YaHei', color: '555555' }),
+              new docx.TextRun({ text: artUrl, size: 18, font: 'Calibri', color: '0066CC' })
+            ],
+            spacing: { before: 200, after: 60 }
+          }));
+        }
+
         const doc = new docx.Document({
           sections: [{
             properties: {
@@ -23981,6 +24281,8 @@ Supply constraints are emerging as a key concern. Several planned liquefaction p
                 ]
               }),
               ...kwParagraphs,
+              ...annotParagraphs,
+              ...urlParagraphs,
               new docx.Paragraph({
                 children: [new docx.TextRun({
                   text: '由 能源航运双语排版工具 生成  ·  ' + new Date().toLocaleDateString('zh-CN'),
