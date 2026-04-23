@@ -2,22 +2,26 @@
   能源航运双语排版工具 — Energy & Shipping Bilingual Formatter
   ===========================================================
   Purpose : Format and translate energy/LNG/shipping industry articles
-            into a bilingual (English + Chinese) side-by-side layout.
+            into a bilingual (English + Chinese) side-by-side layout,
+            with AI-powered deep analysis of professional terminology,
+            geopolitical dynamics, and industry insights.
 
   Features:
-    - Paragraph-by-paragraph translation via MyMemory free API
-      (https://api.mymemory.translated.net)
+    - Paragraph-by-paragraph translation via Google Gemini API
+      (model: gemini-2.5-flash, requires a valid GEMINI_API_KEY)
+    - AI deep analysis: 专业词汇 / 地缘政治动态 / 深层洞察
     - LNG/shipping keyword auto-highlighting
     - Inline Chinese translation editing (contenteditable)
     - Per-paragraph collapsible notes
     - Reading mode (English-only view)
     - Export to Word (.docx) using the inlined docx.js library
 
-  Usage   : Open in Chrome / Edge. Paste English text in the left panel,
-            click "翻译全文", review/edit in Preview tab, then export.
+  Usage   : Open in Chrome / Edge. Set your API key in GEMINI_API_KEY
+            constant (search "YOUR_GEMINI_API_KEY_HERE"). Paste English
+            text in the left panel, click "翻译全文", then "深度分析".
 
   Dependencies:
-    - MyMemory Translation API (external fetch, requires internet)
+    - Google Gemini API (requires internet + valid API key)
     - docx.js library (inlined in <script> section, no CDN needed)
 
   No build step required — single self-contained HTML file.
@@ -577,6 +581,83 @@
     #tab-preview::-webkit-scrollbar-track { background: transparent; }
     #tab-preview::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 3px; }
 
+    /* Analyze button */
+    .btn-analyze {
+      background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(167,139,250,0.15));
+      border: 1px solid rgba(167,139,250,0.45);
+      color: #C4B5FD;
+      font-weight: 600;
+    }
+    .btn-analyze:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(124,58,237,0.45), rgba(167,139,250,0.3));
+      border-color: rgba(167,139,250,0.8);
+      color: #EDE9FE;
+    }
+    .btn-analyze:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Deep analysis panel */
+    .analysis-panel {
+      margin: 16px 16px 20px;
+      background: rgba(8,18,38,0.92);
+      border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 10px;
+      padding: 20px 22px;
+      color: #C8D8E8;
+    }
+    .analysis-panel-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(167,139,250,0.2);
+    }
+    .analysis-section-heading {
+      font-size: 12px;
+      font-weight: 700;
+      color: #A78BFA;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 18px 0 10px;
+    }
+    .analysis-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+    .analysis-item-bullet {
+      color: #A78BFA;
+      font-size: 16px;
+      line-height: 1.45;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .analysis-item-body { flex: 1; }
+    .analysis-item-title {
+      font-weight: 700;
+      color: #fff;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .analysis-item-content {
+      color: rgba(200,216,232,0.78);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+    .analysis-term-tag {
+      display: inline-block;
+      background: rgba(167,139,250,0.15);
+      border: 1px solid rgba(167,139,250,0.3);
+      border-radius: 4px;
+      color: #C4B5FD;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      margin-right: 8px;
+    }
+
     /* Glassmorphism card effect */
     .glass-card {
       background: rgba(15,40,71,0.6);
@@ -647,6 +728,7 @@
     <div class="panel-section">
       <div class="section-label">🌐 翻译</div>
       <button class="btn btn-primary" id="btn-translate" onclick="translateAll()">🌐 翻译全文</button>
+      <button class="btn btn-analyze" id="btn-analyze" onclick="analyzeArticle()" disabled style="margin-top:6px;">🔬 深度分析</button>
       <div class="progress-wrap" id="progress-wrap">
         <div class="progress-label">
           <span>翻译进度</span>
@@ -23794,12 +23876,20 @@ var __async = (__this, __arguments, generator) => {
 })({});
 
 
+    // ===== GEMINI API CONFIG =====
+    // 👉 Replace the value below with your Google AI Studio API key
+    const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE';
+    const GEMINI_MODEL   = 'gemini-2.5-flash';
+    const GEMINI_URL     = 'https://generativelanguage.googleapis.com/v1beta/models/'
+                         + GEMINI_MODEL + ':generateContent?key=';
+
     // ===== STATE =====
     let paragraphs = [];       // {en, zh, note}
     let translating = false;
     let readingMode = false;
     let userAnnotations = {};  // key: word (lowercase), value: {word, note}
     let _annotPending = null;  // { word, key } while popup is open
+    let analysisResult = null; // structured deep-analysis JSON from Gemini
 
     const LNG_KEYWORDS = [
       'LNG','bunkering','liquefaction','FSRU','liquefied natural gas',
@@ -23943,16 +24033,24 @@ var __async = (__this, __arguments, generator) => {
       if (e.key === 'Escape') closeAnnotPopup();
     });
 
-    // ===== TRANSLATION =====
+    // ===== TRANSLATION (Gemini) =====
     async function translateParagraph(text) {
-      const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|zh';
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      const data = await resp.json();
-      if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
-        return data.responseData.translatedText;
+      const prompt = '你是专业能源航运行业英汉翻译。请将以下英文段落翻译成流畅、准确的中文。'
+                   + '只输出译文，不加任何解释、序号或引号：\n\n' + text;
+      const resp = await fetch(GEMINI_URL + GEMINI_API_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2 }
+        })
+      });
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error((err.error && err.error.message) || 'HTTP ' + resp.status);
       }
-      throw new Error(data.responseDetails || 'Translation failed');
+      const data = await resp.json();
+      return data.candidates[0].content.parts[0].text.trim();
     }
 
     async function translateAll() {
@@ -23979,11 +24077,129 @@ var __async = (__this, __arguments, generator) => {
       translating = false;
       document.getElementById('btn-translate').disabled = false;
       document.getElementById('btn-export').disabled = false;
+      document.getElementById('btn-analyze').disabled = false;
       renderPreview();
       switchTab('preview');
     }
 
-    // ===== RENDER PREVIEW =====
+    // ===== DEEP ANALYSIS (Gemini) =====
+    async function analyzeArticle() {
+      if (!paragraphs.length) { showError('请先翻译文章'); return; }
+      showError('');
+      const btnAnalyze = document.getElementById('btn-analyze');
+      btnAnalyze.disabled = true;
+      btnAnalyze.textContent = '⏳ 分析中…';
+
+      const fullEnText = paragraphs.map(p => p.en).join('\n\n');
+      const title = document.getElementById('art-title').value || '';
+      const source = document.getElementById('art-source').value || '';
+
+      const prompt = `你是资深能源航运行业分析师，专精地缘政治与航运市场。请对以下ship and bunker行业新闻进行深度分析。
+
+文章标题：${title}
+来源：${source}
+正文：
+${fullEnText}
+
+请严格以如下JSON格式返回结果（不要加代码块标记，直接返回JSON，不要任何额外说明）：
+{
+  "vocabulary": [
+    {"term": "专业术语原文", "explanation": "该术语在航运/能源行业的含义、用法及重要性"}
+  ],
+  "dynamics": [
+    {"title": "动态要点标题", "content": "关于地缘政治背景、行业趋势或市场动向的具体分析"}
+  ],
+  "insights": [
+    {"title": "洞察标题", "content": "文章未明说但值得关注的深层信息、潜在影响或行业盲点"}
+  ]
+}
+要求：vocabulary 提取3-5个核心专业术语；dynamics 给出2-3条分析；insights 给出2-3条洞察。全部用中文回答。`;
+
+      try {
+        const resp = await fetch(GEMINI_URL + GEMINI_API_KEY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.5, responseMimeType: 'application/json' }
+          })
+        });
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error((err.error && err.error.message) || 'HTTP ' + resp.status);
+        }
+        const data = await resp.json();
+        let raw = data.candidates[0].content.parts[0].text.trim();
+        // Strip markdown code fences if model adds them despite the instruction
+        raw = raw.replace(/^```json\s*/i, '').replace(/\s*```$/, '');
+        analysisResult = JSON.parse(raw);
+        renderPreview();
+        switchTab('preview');
+        // Scroll to analysis panel
+        setTimeout(() => {
+          const ap = document.querySelector('.analysis-panel');
+          if (ap) ap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      } catch(e) {
+        showError('分析失败: ' + e.message);
+        console.error(e);
+      } finally {
+        btnAnalyze.disabled = false;
+        btnAnalyze.textContent = '🔬 深度分析';
+      }
+    }
+
+    function renderAnalysisPanel(result) {
+      let html = `<div class="analysis-panel">
+        <div class="analysis-panel-title">🔬 智识深度透视</div>`;
+
+      // Vocabulary
+      if (result.vocabulary && result.vocabulary.length) {
+        html += `<div class="analysis-section-heading">📖 专业词汇解读</div>`;
+        result.vocabulary.forEach(v => {
+          html += `<div class="analysis-item">
+            <div class="analysis-item-bullet">•</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title"><span class="analysis-term-tag">${escHtml(v.term)}</span></div>
+              <div class="analysis-item-content">${escHtml(v.explanation)}</div>
+            </div>
+          </div>`;
+        });
+      }
+
+      // Geopolitics & industry dynamics
+      if (result.dynamics && result.dynamics.length) {
+        html += `<div class="analysis-section-heading">🌐 地缘政治与行业动态</div>`;
+        result.dynamics.forEach(d => {
+          html += `<div class="analysis-item">
+            <div class="analysis-item-bullet">•</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title">${escHtml(d.title)}</div>
+              <div class="analysis-item-content">${escHtml(d.content)}</div>
+            </div>
+          </div>`;
+        });
+      }
+
+      // Insights & blind spots
+      if (result.insights && result.insights.length) {
+        html += `<div class="analysis-section-heading">💡 深层洞察与盲点</div>`;
+        result.insights.forEach(ins => {
+          html += `<div class="analysis-item">
+            <div class="analysis-item-bullet">•</div>
+            <div class="analysis-item-body">
+              <div class="analysis-item-title">${escHtml(ins.title)}</div>
+              <div class="analysis-item-content">${escHtml(ins.content)}</div>
+            </div>
+          </div>`;
+        });
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
+
     function renderPreview() {
       const title = document.getElementById('art-title').value || '(无标题)';
       const source = document.getElementById('art-source').value;
@@ -24046,6 +24262,11 @@ var __async = (__this, __arguments, generator) => {
         });
       }
       html += `</div></div>`;
+
+      // Deep analysis section
+      if (analysisResult) {
+        html += renderAnalysisPanel(analysisResult);
+      }
 
       // Source URL at end
       if (artUrl) {
