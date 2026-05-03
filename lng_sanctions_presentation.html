@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>国际船舶LNG加注业务中的制裁风险防范</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ===== viewport-base.css ===== */
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide {
+  width: 100vw; height: 100vh; height: 100dvh;
+  overflow: hidden; scroll-snap-align: start;
+  display: flex; flex-direction: column; position: relative;
+}
+.slide-content {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; max-height: 100%;
+  overflow: hidden; padding: var(--slide-padding);
+}
+
+/* ===== CSS Variables ===== */
+:root {
+  --title-size: clamp(1.5rem, 5vw, 4rem);
+  --h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+  --h3-size: clamp(1rem, 2.5vw, 1.75rem);
+  --body-size: clamp(0.75rem, 1.5vw, 1.125rem);
+  --small-size: clamp(0.65rem, 1vw, 0.875rem);
+  --slide-padding: clamp(1rem, 4vw, 4rem);
+  --content-gap: clamp(0.5rem, 2vw, 2rem);
+  --element-gap: clamp(0.25rem, 1vw, 1rem);
+
+  --navy: #0D1B2A;
+  --navy-mid: #162435;
+  --navy-light: #1E3448;
+  --gold: #C6A05A;
+  --gold-light: #D4B57A;
+  --gold-dim: rgba(198,160,90,0.3);
+  --text-primary: #E8DCC8;
+  --text-secondary: #A8956E;
+  --text-muted: #6B7A8D;
+  --border-subtle: rgba(198,160,90,0.2);
+}
+
+.card, .container, .content-box {
+  max-width: min(90vw, 1000px);
+  max-height: min(80vh, 700px);
+}
+img, .image-container {
+  max-width: 100%;
+  max-height: min(50vh, 400px);
+  object-fit: contain;
+}
+
+@media (max-height: 700px) {
+  :root {
+    --slide-padding: clamp(0.75rem, 3vw, 2rem);
+    --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+    --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+    --h2-size: clamp(1rem, 3vw, 1.75rem);
+  }
+}
+@media (max-height: 600px) {
+  :root {
+    --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+    --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+    --title-size: clamp(1.1rem, 4vw, 2rem);
+    --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+  }
+  .nav-dots, .keyboard-hint, .decorative { display: none; }
+}
+@media (max-height: 500px) {
+  :root {
+    --slide-padding: clamp(0.4rem, 2vw, 1rem);
+    --title-size: clamp(1rem, 3.5vw, 1.5rem);
+    --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+    --body-size: clamp(0.65rem, 1vw, 0.85rem);
+  }
+}
+@media (max-width: 600px) {
+  :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+  .grid { grid-template-columns: 1fr !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ===== SLIDE BACKGROUND & PATTERN ===== */
+.slide { background: var(--navy); }
+.slide::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(198,160,90,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ===== CORNER DECORATIONS ===== */
+.corner-tl, .corner-br { position: absolute; width: 40px; height: 40px; pointer-events: none; z-index: 1; }
+.corner-tl { top: 20px; left: 20px; border-top: 1px solid var(--gold-dim); border-left: 1px solid var(--gold-dim); }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid var(--gold-dim); border-right: 1px solid var(--gold-dim); }
+
+/* ===== PROGRESS BAR ===== */
+#progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0%;
+  background: var(--gold);
+  z-index: 1000;
+  transition: width 0.4s ease;
+}
+
+/* ===== NAV DOTS ===== */
+.nav-dots {
+  position: fixed; right: 18px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 999;
+}
+.nav-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.nav-dot.active { background: var(--gold); border-color: var(--gold); transform: scale(1.3); }
+.nav-dot:hover { border-color: var(--gold); background: var(--gold-dim); }
+.nav-dot::after {
+  content: attr(title);
+  position: absolute; right: 18px; top: 50%;
+  transform: translateY(-50%);
+  background: var(--navy-mid);
+  color: var(--text-primary);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.nav-dot:hover::after { opacity: 1; }
+
+/* ===== KEYBOARD HINT ===== */
+.keyboard-hint {
+  position: fixed; bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  background: rgba(22,36,53,0.8);
+  padding: 4px 12px; border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.slide.visible .reveal:nth-child(1) { transition-delay: 0.1s; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.2s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.3s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.4s; }
+.slide.visible .reveal:nth-child(5) { transition-delay: 0.5s; }
+.slide.visible .reveal:nth-child(6) { transition-delay: 0.6s; }
+
+/* ===== TYPOGRAPHY ===== */
+body { font-family: 'IBM Plex Sans', sans-serif; color: var(--text-primary); }
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+h1 { font-size: var(--title-size); color: var(--text-primary); line-height: 1.2; }
+h2 { font-size: var(--h2-size); color: var(--text-primary); line-height: 1.3; }
+h3 { font-size: var(--h3-size); color: var(--gold); line-height: 1.4; }
+p, li { font-size: var(--body-size); line-height: 1.6; color: var(--text-primary); }
+small { font-size: var(--small-size); }
+
+/* ===== GOLD DIVIDER ===== */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: var(--element-gap) 0;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--navy-mid);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 8px 24px rgba(198,160,90,0.15);
+}
+.card h3 { margin-bottom: 0.5em; }
+
+/* ===== GRIDS ===== */
+.grid { display: grid; gap: var(--element-gap); }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ===== BULLET LISTS ===== */
+.blist { list-style: none; display: flex; flex-direction: column; gap: 0.4em; }
+.blist li {
+  padding: 0.4em 0.6em;
+  border-left: 2px solid var(--border-subtle);
+  border-radius: 0 4px 4px 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.blist li:hover { background: rgba(198,160,90,0.08); border-left-color: var(--gold); }
+
+/* ===== NUMBERED LISTS ===== */
+.num-list { list-style: none; counter-reset: item; display: flex; flex-direction: column; gap: 0.5em; }
+.num-list li {
+  counter-increment: item;
+  display: flex; gap: 0.75em; align-items: flex-start;
+  padding: 0.5em 0.75em;
+  border-left: 2px solid var(--border-subtle);
+  border-radius: 0 4px 4px 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.num-list li::before {
+  content: counter(item);
+  background: var(--gold);
+  color: var(--navy);
+  width: 1.5em; height: 1.5em;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700; font-size: 0.85em;
+}
+.num-list li:hover { background: rgba(198,160,90,0.08); border-left-color: var(--gold); }
+
+/* ===== INFO / WARNING BOXES ===== */
+.info-box {
+  background: rgba(198,160,90,0.08);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  padding: 0.6em 1em;
+  font-size: var(--small-size);
+  color: var(--text-secondary);
+  margin-top: var(--element-gap);
+}
+.warning-box {
+  background: rgba(231,76,60,0.08);
+  border: 1px solid rgba(231,76,60,0.3);
+  border-left: 3px solid #E74C3C;
+  border-radius: 4px;
+  padding: 0.6em 1em;
+  font-size: var(--small-size);
+  color: #E8A09A;
+  margin-top: var(--element-gap);
+}
+
+/* ===== FLOW STEPS ===== */
+.flow-container {
+  display: flex; align-items: stretch; gap: 0;
+  flex-wrap: nowrap; overflow-x: auto;
+}
+.flow-step {
+  flex: 1; min-width: 0;
+  background: var(--navy-mid);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: clamp(0.5rem, 1.5vw, 1rem);
+  display: flex; flex-direction: column; gap: 0.3em;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+.flow-step:hover { transform: scale(1.02); border-color: var(--gold); }
+.flow-step .step-icon { font-size: clamp(1.2rem, 3vw, 1.8rem); }
+.flow-step h3 { font-size: var(--small-size); color: var(--gold); font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; }
+.flow-step p { font-size: var(--small-size); color: var(--text-secondary); }
+.flow-arrow { display: flex; align-items: center; padding: 0 4px; color: var(--gold); font-size: var(--body-size); flex-shrink: 0; }
+
+/* ===== CHAPTER SLIDES ===== */
+.chapter-slide .slide-content {
+  align-items: center; justify-content: center; text-align: center;
+  background: linear-gradient(160deg, var(--navy), #0A1520, var(--navy-light));
+}
+.chapter-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: var(--body-size);
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+}
+.chapter-subtitle {
+  font-size: var(--body-size);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 0.5em;
+}
+
+/* ===== COVER SLIDE ===== */
+.cover-slide .slide-content {
+  background: linear-gradient(160deg, var(--navy), #0A1520, var(--navy-light));
+  align-items: center; text-align: center;
+}
+.tag-pill {
+  display: inline-block;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: var(--small-size);
+  padding: 0.2em 0.8em;
+  border-radius: 20px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--element-gap);
+}
+.cover-subtitle {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: var(--h3-size);
+  color: var(--text-secondary);
+  margin-top: var(--element-gap);
+}
+.cover-meta {
+  display: flex; gap: 1em; align-items: center;
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  font-family: 'IBM Plex Sans', sans-serif;
+  flex-wrap: wrap; justify-content: center;
+  margin-top: var(--content-gap);
+}
+.cover-meta span { color: var(--gold-dim); }
+
+/* ===== TOC ===== */
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--element-gap); }
+.toc-item {
+  background: var(--navy-mid);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex; gap: 0.75em; align-items: flex-start;
+}
+.toc-item:hover {
+  border-color: var(--gold);
+  box-shadow: 0 4px 16px rgba(198,160,90,0.12);
+  transform: translateY(-2px);
+}
+.toc-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--gold-dim);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.toc-text h3 { font-family: 'IBM Plex Sans', sans-serif; font-size: var(--body-size); font-weight: 600; color: var(--text-primary); }
+.toc-text small { color: var(--text-muted); }
+
+/* ===== STAT NUMBER ===== */
+.stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--gold);
+  line-height: 1.1;
+}
+
+/* ===== TABLE ===== */
+table { width: 100%; border-collapse: collapse; font-size: var(--small-size); }
+thead th {
+  background: var(--navy-light);
+  color: var(--gold);
+  padding: 0.5em 0.75em;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-subtle);
+}
+thead th:hover { color: var(--gold-light); }
+tbody tr { border-bottom: 1px solid rgba(198,160,90,0.08); transition: background 0.2s; }
+tbody tr:hover { background: rgba(198,160,90,0.06); }
+tbody td { padding: 0.4em 0.75em; color: var(--text-primary); }
+tbody tr.risk-high td { color: #E8A09A; }
+.sort-icon { margin-left: 4px; font-size: 0.8em; }
+
+/* ===== TIMELINE ===== */
+.timeline { display: flex; flex-direction: column; gap: var(--element-gap); position: relative; }
+.timeline-item {
+  display: flex; gap: 1em; align-items: flex-start;
+  padding: 0.6em 0.75em;
+  background: var(--navy-mid);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+}
+.timeline-item.warning { border-left: 3px solid var(--gold); background: rgba(198,160,90,0.05); }
+.timeline-item.danger { border-left: 3px solid #E74C3C; background: rgba(231,76,60,0.05); }
+.timeline-time { font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: var(--small-size); color: var(--gold); white-space: nowrap; min-width: 4.5em; }
+.timeline-body h3 { font-family: 'IBM Plex Sans', sans-serif; font-size: var(--body-size); font-weight: 600; color: var(--text-primary); }
+.timeline-body p { font-size: var(--small-size); color: var(--text-secondary); margin-top: 0.2em; }
+
+/* ===== TIER FRAMEWORK ===== */
+.tier {
+  background: var(--navy-mid);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 0.75em 1em;
+  margin-bottom: var(--element-gap);
+  display: flex; gap: 0.75em; align-items: flex-start;
+}
+.tier-1 { border-left: 4px solid #E74C3C; }
+.tier-2 { border-left: 4px solid var(--gold); }
+.tier-3 { border-left: 4px solid #3498DB; }
+.tier-label { font-family: 'IBM Plex Sans', sans-serif; font-size: var(--small-size); font-weight: 600; color: var(--text-secondary); white-space: nowrap; padding-top: 0.1em; }
+.tier-body h3 { font-family: 'IBM Plex Sans', sans-serif; font-size: var(--body-size); font-weight: 600; color: var(--text-primary); }
+.tier-body p { font-size: var(--small-size); color: var(--text-secondary); }
+
+/* ===== CHECKLIST ===== */
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 0.4em; }
+.checklist li { font-size: var(--body-size); padding: 0.35em 0; display: flex; gap: 0.5em; align-items: flex-start; }
+.check-label {
+  font-size: var(--small-size); font-weight: 600;
+  padding: 0.1em 0.5em; border-radius: 3px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.check-label.blue { background: rgba(52,152,219,0.2); color: #7EC8E3; }
+.check-label.red { background: rgba(231,76,60,0.2); color: #E8A09A; }
+
+/* ===== VESSEL INFO ===== */
+.vessel-info-card {
+  background: var(--navy-mid);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  font-size: var(--small-size);
+  overflow-y: auto;
+}
+.vessel-field { display: flex; gap: 0.5em; margin-bottom: 0.4em; }
+.vessel-field-label { color: var(--text-muted); min-width: 6em; }
+.vessel-field-value { color: var(--text-primary); font-weight: 500; }
+.flag-history-box {
+  background: rgba(231,76,60,0.07);
+  border: 1px solid rgba(231,76,60,0.25);
+  border-radius: 4px;
+  padding: 0.4em 0.6em;
+  font-size: var(--small-size);
+  color: #E8A09A;
+  margin: 0.4em 0;
+}
+.risk-badge {
+  background: rgba(231,76,60,0.2);
+  color: #E8A09A;
+  font-size: 0.85em;
+  padding: 0.1em 0.5em;
+  border-radius: 3px;
+  margin-left: 0.4em;
+}
+
+/* ===== PORT LIST ===== */
+.port-list { list-style: none; display: flex; flex-direction: column; gap: 0.3em; }
+.port-list li {
+  font-size: var(--small-size);
+  padding: 0.3em 0.5em;
+  border-left: 2px solid rgba(231,76,60,0.4);
+  color: var(--text-primary);
+}
+.port-category { font-weight: 600; color: #E8A09A; font-size: var(--small-size); margin-top: 0.4em; }
+
+/* ===== BIG QUOTE ===== */
+.big-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+  color: var(--gold);
+  line-height: 1.4;
+  text-align: center;
+  padding: var(--content-gap) var(--slide-padding);
+  position: relative;
+}
+.big-quote::before { content: '"'; font-size: 2em; opacity: 0.3; line-height: 0; vertical-align: -0.2em; margin-right: 0.1em; }
+.big-quote::after { content: '"'; font-size: 2em; opacity: 0.3; line-height: 0; vertical-align: -0.2em; margin-left: 0.1em; }
+
+/* ===== CONCLUSION FOOTER ===== */
+.conclusion-footer {
+  display: flex; gap: 0.75em; align-items: center;
+  justify-content: center;
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  padding: 0.5em;
+}
+.conclusion-footer .sep { color: var(--gold-dim); }
+
+/* ===== SLIDE 11 SPECIFIC ===== */
+#flow-banner {
+  opacity: 0; transform: translateY(100%);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+#flow-banner.visible { opacity: 1; transform: translateY(0); }
+#next-step-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+#next-step-btn:not(:disabled):hover { opacity: 0.85; transform: scale(1.03); }
+
+/* ===== ICON ROW ===== */
+.icon-item { text-align: center; }
+.icon-item .icon { font-size: clamp(1.5rem, 3.5vw, 2.5rem); display: block; margin-bottom: 0.3em; }
+
+/* ===== OVERRIDES ===== */
+.slide-header { margin-bottom: var(--content-gap); }
+.slide-header h2 { border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.3em; }
+</style>
+</head>
+<body>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div id="progress-bar"></div>
+
+<!-- ===== NAV DOTS ===== -->
+<nav class="nav-dots" id="nav-dots"></nav>
+
+<!-- ===== KEYBOARD HINT ===== -->
+<div class="keyboard-hint">← → 切换幻灯片 &nbsp;|&nbsp; ↑↓ 上下翻页</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 1 — COVER -->
+<!-- ============================================================ -->
+<section class="slide cover-slide" data-title="封面">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;justify-content:center;gap:var(--element-gap);">
+    <div class="tag-pill reveal">2025年版</div>
+    <h1 class="reveal" style="line-height:1.25;">
+      国际船舶LNG加注业务中的<br/>
+      <span style="color:var(--gold);">制裁风险防范</span>
+    </h1>
+    <div class="gold-divider reveal" style="width:clamp(100px,20vw,240px);margin:0 auto;"></div>
+    <p class="cover-subtitle reveal">合规管理实务指南</p>
+    <div class="cover-meta reveal">
+      <span>OFAC</span> · <span>EU</span> · <span>OFSI</span> · <span>UN</span>
+      <span style="color:var(--border-subtle);">|</span>
+      制裁风险防范
+      <span style="color:var(--border-subtle);">|</span>
+      合规实务
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2 — TABLE OF CONTENTS -->
+<!-- ============================================================ -->
+<section class="slide" data-title="目录">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>课程大纲</h2>
+    </div>
+    <div class="toc-grid reveal">
+      <div class="toc-item" onclick="document.querySelectorAll('.slide')[2].scrollIntoView({behavior:'smooth'})">
+        <div class="toc-num">01</div>
+        <div class="toc-text">
+          <h3>船舶加注业务介绍</h3>
+          <small>Slides 3–7 · LNG Bunkering Business Overview</small>
+        </div>
+      </div>
+      <div class="toc-item" onclick="document.querySelectorAll('.slide')[7].scrollIntoView({behavior:'smooth'})">
+        <div class="toc-num">02</div>
+        <div class="toc-text">
+          <h3>国际制裁与影子船队</h3>
+          <small>Slides 8–15 · International Sanctions &amp; Shadow Fleet</small>
+        </div>
+      </div>
+      <div class="toc-item" onclick="document.querySelectorAll('.slide')[15].scrollIntoView({behavior:'smooth'})">
+        <div class="toc-num">03</div>
+        <div class="toc-text">
+          <h3>典型合规风险场景</h3>
+          <small>Slides 16–21 · Typical Compliance Risk Scenarios</small>
+        </div>
+      </div>
+      <div class="toc-item" onclick="document.querySelectorAll('.slide')[21].scrollIntoView({behavior:'smooth'})">
+        <div class="toc-num">04</div>
+        <div class="toc-text">
+          <h3>合规实务建议</h3>
+          <small>Slides 22–25 · Practical Compliance Recommendations</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3 — CHAPTER 1 TITLE -->
+<!-- ============================================================ -->
+<section class="slide chapter-slide" data-title="第一章：船舶加注业务介绍">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;justify-content:center;gap:var(--element-gap);">
+    <div class="chapter-label reveal">第一章 · Chapter One</div>
+    <div class="gold-divider reveal" style="width:60px;margin:0 auto;"></div>
+    <h1 class="reveal">船舶加注业务介绍</h1>
+    <p class="chapter-subtitle reveal">LNG Bunkering Business Overview</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4 — LNG加注业务概述 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="LNG加注业务概述">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>什么是LNG加注？</h2>
+    </div>
+    <div class="grid grid-4 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card tilt-card icon-item">
+        <span class="icon">📋</span>
+        <h3>定义</h3>
+        <p>为船舶提供液化天然气燃料的专业服务，是清洁航运能源转型的核心环节</p>
+      </div>
+      <div class="card tilt-card icon-item">
+        <span class="icon">⚓</span>
+        <h3>加注方式</h3>
+        <p>STS（船对船）<br/>PTS（岸对船）<br/>TTS（卡车对船）</p>
+      </div>
+      <div class="card tilt-card icon-item">
+        <span class="icon">📊</span>
+        <h3>市场规模</h3>
+        <div class="stat-number" data-count="120" data-suffix="亿">0亿</div>
+        <p style="font-size:var(--small-size);">2024年全球LNG加注市场（美元）</p>
+      </div>
+      <div class="card tilt-card icon-item">
+        <span class="icon">🚀</span>
+        <h3>增长驱动</h3>
+        <p>IMO 2020硫排放法规推动清洁燃料转型，LNG成为合规替代燃料首选</p>
+      </div>
+    </div>
+    <div class="info-box reveal">
+      💡 LNG相比重油：硫化物降低 <strong>99%</strong>，氮氧化物降低 <strong>80%</strong>，碳排放降低 <strong>20%–25%</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5 — LNG加注操作流程 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="加注操作流程">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>LNG加注操作流程</h2>
+    </div>
+    <div class="flow-container reveal" style="flex:1;min-height:0;align-items:stretch;">
+      <div class="flow-step">
+        <span class="step-icon">📝</span>
+        <h3>预约确认</h3>
+        <p>提交加注申请，核实船舶信息，完成制裁筛查，签署加注协议</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-icon">🔍</span>
+        <h3>安全检查</h3>
+        <p>船岸安全会议(SSSCL)，核查船舶证书，确认接收设备状态</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-icon">🔗</span>
+        <h3>软管连接</h3>
+        <p>建立安全连接，完成压力测试，确认ESD紧急切断装置就绪</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-icon">⛽</span>
+        <h3>加注作业</h3>
+        <p>按预定流量输注LNG，实时监控压力/温度，保持应急通讯</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-icon">✅</span>
+        <h3>完工确认</h3>
+        <p>计量核对，签发BDN加油单，断开连接，完成合规操作记录</p>
+      </div>
+    </div>
+    <div class="warning-box reveal">
+      ⚠️ 步骤1须包含完整制裁筛查；步骤5须完整存档，保存不少于 <strong>5年</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6 — 主要参与方 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="主要参与方">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>LNG加注业务主要参与方</h2>
+    </div>
+    <div class="grid grid-3 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3>🏭 服务提供商</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>LNG供应商（气田/液化厂）</li>
+          <li>加注船运营商</li>
+          <li>港口LNG设施运营商</li>
+          <li>加注站运营商</li>
+          <li>设备维护服务商</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🤝 中间商</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>船舶经纪人（Shipbroker）</li>
+          <li>LNG贸易商</li>
+          <li>物流服务商</li>
+          <li>船舶代理（Ship Agent）</li>
+          <li>管理公司（Ship Manager）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🚢 最终用户</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>集装箱班轮公司</li>
+          <li>散货船运营商</li>
+          <li>邮轮公司</li>
+          <li>LNG运输船东</li>
+          <li>渡轮运营商</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box reveal">
+      💡 每个参与方都可能成为制裁风险传导节点。<strong>中间商尤需关注</strong>，可能混淆真实交易方身份。
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7 — 关键合规节点 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="关键合规节点">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>LNG加注业务关键合规节点</h2>
+    </div>
+    <div class="grid grid-2 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <ul class="blist">
+          <li>
+            <strong>🔎 客户准入审查（KYC/KYS）</strong>
+            <p style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2em;">全面核实客户及船舶身份，建立并维护客户档案</p>
+          </li>
+          <li>
+            <strong>🛳️ 船舶身份核实（IMO/AIS）</strong>
+            <p style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2em;">通过IMO号码核实船舶唯一身份，比对AIS历史轨迹记录</p>
+          </li>
+          <li>
+            <strong>🚫 制裁名单筛查（OFAC/EU/OFSI/UN）</strong>
+            <p style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2em;">全库筛查四大制裁机构名单，覆盖船东、管理方及关联实体</p>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="blist">
+          <li>
+            <strong>📄 合同条款审核</strong>
+            <p style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2em;">确保合同含有制裁条款和即时终止权，明确违约责任</p>
+          </li>
+          <li>
+            <strong>💳 付款路径审查</strong>
+            <p style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2em;">核实付款方与受益人一致性，追溯账户来源与资金链条</p>
+          </li>
+          <li>
+            <strong>📁 操作后复盘记录</strong>
+            <p style="font-size:var(--small-size);color:var(--text-secondary);margin-top:0.2em;">完整存档所有操作记录，确保可审计性，保存不少于5年</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8 — CHAPTER 2 TITLE -->
+<!-- ============================================================ -->
+<section class="slide chapter-slide" data-title="第二章：制裁与影子船队">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;justify-content:center;gap:var(--element-gap);">
+    <div class="chapter-label reveal">第二章 · Chapter Two</div>
+    <div class="gold-divider reveal" style="width:60px;margin:0 auto;"></div>
+    <h1 class="reveal">国际制裁与影子船队</h1>
+    <p class="chapter-subtitle reveal">International Sanctions &amp; Shadow Fleet</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9 — 国际制裁体系概述 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="国际制裁体系">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>国际制裁体系</h2>
+    </div>
+    <div class="grid grid-2 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3>🏛️ 主要制裁机构</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li><strong>OFAC</strong> — 美国财政部海外资产控制办公室</li>
+          <li><strong>EU EEAS</strong> — 欧盟对外行动署制裁部门</li>
+          <li><strong>OFSI</strong> — 英国金融制裁实施办公室</li>
+          <li><strong>UN SC</strong> — 联合国安理会制裁委员会</li>
+          <li><strong>MOFA Japan</strong> — 日本外务省制裁部门</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>⚖️ 制裁类型</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>综合性制裁：伊朗、朝鲜、俄罗斯、古巴、叙利亚</li>
+          <li>定向制裁：SDN名单、EU资产冻结名单</li>
+          <li>行业制裁：能源、军工、金融、航运</li>
+          <li>次级制裁：与受制裁方交易的第三方实体</li>
+          <li>价格上限：俄罗斯石油G7价格上限制度</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box reveal">
+      ⚠️ <strong>次级制裁警告</strong> — 即使不在美国境内，使用美元或与美国金融系统关联，OFAC制裁同样适用
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 10 — 影子船队特征 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="影子船队特征">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>影子船队（Shadow Fleet）特征识别</h2>
+    </div>
+    <div class="grid grid-3 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3 style="color:#E74C3C;">🚩 频繁换旗</h3>
+        <p>短期内多次更换船旗国，转向弱监管的"方便旗"国家（帕劳、加蓬、冈比亚等）</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🚩 关闭AIS</h3>
+        <p>在制裁区域（伊朗、俄罗斯、委内瑞拉近海）附近关闭AIS，出现位置"空白"</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🚩 壳公司船东</h3>
+        <p>注册在BVI、开曼群岛、巴拿马等离岸地区的空壳公司，受益所有人不透明</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🚩 年龄老化</h3>
+        <p>船龄超过15年的老旧油轮，合规保险难以获得，平均船龄约22年</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🚩 P&amp;I退出</h3>
+        <p>被国际互保协会集团（IG P&amp;I Club）除名，转用俄罗斯或非主流保险公司</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🚩 管理混乱</h3>
+        <p>频繁更换船舶管理公司，管理责任链条断裂，技术状态无法保障</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 11 — ANIMATED WORLD MAP -->
+<!-- ============================================================ -->
+<section class="slide" id="slide-animation" data-title="制裁规避路径动画">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div id="map-container" style="width:100%;height:100%;position:relative;display:flex;flex-direction:column;">
+    <div id="map-title" style="text-align:center;padding:clamp(0.5rem,2vh,1rem);font-family:'Playfair Display',serif;font-size:var(--h2-size);color:var(--text-primary);flex-shrink:0;">制裁规避路径解析：伊朗石油出口案例</div>
+    <div id="step-counter" style="position:absolute;top:clamp(3rem,8%,5rem);left:clamp(0.5rem,2vw,1.5rem);font-size:var(--body-size);color:var(--text-muted);background:var(--navy-mid);padding:0.3em 0.7em;border-radius:4px;border:1px solid var(--border-subtle);">0 / 11</div>
+    <svg id="world-map-svg" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet" style="flex:1;width:100%;min-height:0;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#E74C3C"/>
+        </marker>
+        <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#3498DB"/>
+        </marker>
+      </defs>
+      <!-- Ocean -->
+      <rect x="0" y="0" width="900" height="420" fill="#0A1520"/>
+      <!-- Continents -->
+      <!-- North America -->
+      <path d="M 75,48 L 160,40 L 205,55 L 228,72 L 250,102 L 260,142 L 246,182 L 222,205 L 200,215 L 185,238 L 168,234 L 152,220 L 130,200 L 110,182 L 96,155 L 80,125 L 70,98 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- South America -->
+      <path d="M 192,238 L 228,228 L 255,234 L 272,255 L 282,295 L 278,335 L 256,368 L 230,382 L 208,376 L 196,350 L 188,315 L 182,278 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- Europe -->
+      <path d="M 378,58 L 410,48 L 445,52 L 460,65 L 468,80 L 460,96 L 446,108 L 426,114 L 404,110 L 386,94 L 376,78 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- Africa -->
+      <path d="M 386,142 L 422,135 L 458,140 L 478,155 L 492,192 L 498,235 L 490,278 L 470,322 L 446,345 L 420,348 L 398,330 L 382,288 L 374,248 L 370,202 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- Asia (large Eurasia body) -->
+      <path d="M 458,48 L 550,38 L 650,42 L 720,52 L 778,62 L 808,82 L 800,105 L 778,125 L 752,138 L 718,145 L 698,158 L 675,168 L 648,175 L 618,182 L 592,188 L 562,198 L 535,215 L 518,228 L 502,238 L 488,234 L 470,215 L 458,195 L 450,168 L 446,142 L 448,115 L 458,95 L 462,72 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- Arabian Peninsula -->
+      <path d="M 500,190 L 524,184 L 548,188 L 560,202 L 558,224 L 540,238 L 520,245 L 503,240 L 494,228 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- Indian Subcontinent -->
+      <path d="M 560,175 L 590,168 L 606,178 L 612,198 L 608,224 L 592,250 L 576,268 L 560,260 L 546,244 L 540,220 L 544,195 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- SE Asia peninsula -->
+      <path d="M 648,175 L 668,168 L 682,176 L 688,196 L 682,218 L 668,230 L 650,225 L 640,210 L 638,190 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+      <!-- Australia -->
+      <path d="M 700,272 L 742,262 L 775,268 L 796,288 L 800,318 L 788,344 L 758,358 L 722,354 L 700,334 L 694,308 Z" fill="#162435" stroke="#1E3448" stroke-width="0.8"/>
+
+      <!-- ===== LINES (animated by JS) ===== -->
+      <path id="line-iran-uae" d="M 522,192 Q 532,205 535,215" stroke="#E74C3C" stroke-width="2" fill="none" marker-end="url(#arrow-red)" opacity="0" stroke-dasharray="50" stroke-dashoffset="50"/>
+      <path id="line-oman-sd" d="M 542,225 C 558,275 615,268 665,235 C 695,215 718,192 728,162" stroke="#E74C3C" stroke-width="2.5" fill="none" marker-end="url(#arrow-red)" opacity="0" stroke-dasharray="5,3" stroke-dashoffset="0"/>
+      <path id="line-uae-hk" d="M 538,216 C 578,208 618,202 655,200 C 676,200 695,204 710,212" stroke="#3498DB" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" opacity="0"/>
+      <path id="line-sd-hk" d="M 726,165 L 712,212" stroke="#3498DB" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" opacity="0"/>
+      <path id="line-sd-hk2" d="M 722,168 C 720,185 716,198 714,212" stroke="#3498DB" stroke-width="1.5" fill="none" opacity="0" stroke-dasharray="3,3"/>
+      <path id="line-hk-dubai" d="M 708,212 C 658,220 608,224 572,222" stroke="#3498DB" stroke-width="2" fill="none" marker-end="url(#arrow-blue)" opacity="0"/>
+      <path id="line-dubai-bvi1" d="M 548,225 C 475,232 395,242 318,248 C 285,250 262,248 240,252" stroke="#3498DB" stroke-width="1.5" fill="none" marker-end="url(#arrow-blue)" opacity="0" stroke-dasharray="4,3"/>
+      <path id="line-dubai-bvi2" d="M 548,230 C 472,240 390,252 312,258 C 278,260 258,258 240,258" stroke="#3498DB" stroke-width="1.5" fill="none" marker-end="url(#arrow-blue)" opacity="0" stroke-dasharray="4,3"/>
+      <path id="line-bvi-turkey" d="M 240,252 C 295,228 340,208 380,196 C 408,186 432,180 455,178" stroke="#E74C3C" stroke-width="2" fill="none" marker-end="url(#arrow-red)" opacity="0"/>
+      <path id="line-turkey-iran" d="M 460,178 C 482,182 500,185 518,188" stroke="#E74C3C" stroke-width="2" fill="none" marker-end="url(#arrow-red)" opacity="0"/>
+
+      <!-- ===== NODES ===== -->
+      <!-- node-iran -->
+      <g id="node-iran" opacity="0">
+        <circle cx="520" cy="190" r="7" fill="#E74C3C" filter="url(#glow)"/>
+        <text x="530" y="185" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">① 伊朗石油公司</text>
+        <text x="530" y="196" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">Iran Oil Company</text>
+      </g>
+      <!-- node-uae -->
+      <g id="node-uae" opacity="0">
+        <circle cx="535" cy="215" r="6" fill="#E74C3C" filter="url(#glow)"/>
+        <text x="545" y="211" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">① UAE公司D</text>
+        <text x="545" y="222" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">空壳贸易公司</text>
+      </g>
+      <!-- node-oman -->
+      <g id="node-oman" opacity="0">
+        <circle cx="545" cy="230" r="5" fill="#E74C3C" filter="url(#glow)"/>
+        <text x="480" y="226" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">② 船离阿曼港</text>
+        <text x="480" y="237" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">AIS已关闭</text>
+      </g>
+      <!-- node-hk -->
+      <g id="node-hk" opacity="0">
+        <circle cx="712" cy="215" r="6" fill="#3498DB" filter="url(#glow)"/>
+        <text x="650" y="210" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">② 香港壳公司A</text>
+        <text x="650" y="221" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">账户A1（港元）</text>
+      </g>
+      <!-- node-shandong -->
+      <g id="node-shandong" opacity="0">
+        <circle cx="728" cy="162" r="6" fill="#3498DB" filter="url(#glow)"/>
+        <text x="738" y="158" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">① 山东C公司</text>
+        <text x="738" y="169" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">实际买家</text>
+      </g>
+      <!-- node-dubai -->
+      <g id="node-dubai" opacity="0">
+        <circle cx="555" cy="225" r="6" fill="#C6A05A" filter="url(#glow)"/>
+        <text x="490" y="245" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">③ 迪拜USD账户A2</text>
+        <text x="490" y="256" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">换汇HKD→USD</text>
+      </g>
+      <!-- node-bvi -->
+      <g id="node-bvi" opacity="0">
+        <circle cx="238" cy="254" r="6" fill="#3498DB" filter="url(#glow)"/>
+        <text x="175" y="250" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">④ BVI壳公司B</text>
+        <text x="175" y="261" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">拆分汇款&lt;$500k/笔</text>
+      </g>
+      <!-- node-turkey -->
+      <g id="node-turkey" opacity="0">
+        <circle cx="458" cy="178" r="6" fill="#E74C3C" filter="url(#glow)"/>
+        <text x="420" y="168" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif" font-weight="600">⑤ 土耳其中转</text>
+        <text x="420" y="179" fill="#A8956E" font-size="8" font-family="IBM Plex Sans,sans-serif">回流伊朗</text>
+      </g>
+
+      <!-- Legend -->
+      <g transform="translate(10,370)">
+        <rect x="0" y="0" width="200" height="42" fill="rgba(22,36,53,0.85)" rx="4" stroke="rgba(198,160,90,0.2)" stroke-width="0.5"/>
+        <line x1="8" y1="12" x2="28" y2="12" stroke="#E74C3C" stroke-width="2"/>
+        <text x="33" y="16" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif">货物流向（灰线）</text>
+        <line x1="8" y1="30" x2="28" y2="30" stroke="#3498DB" stroke-width="2"/>
+        <text x="33" y="34" fill="#E8DCC8" font-size="9" font-family="IBM Plex Sans,sans-serif">资金流向（暗道）</text>
+      </g>
+    </svg>
+
+    <button id="next-step-btn" onclick="window.nextStep&&window.nextStep()" style="position:absolute;bottom:clamp(1rem,3vh,2rem);right:clamp(3rem,8vw,6rem);background:var(--gold);color:var(--navy);border:none;padding:0.6em 1.5em;border-radius:4px;font-family:'IBM Plex Sans',sans-serif;font-size:var(--body-size);font-weight:600;cursor:pointer;transition:opacity 0.3s ease,transform 0.2s ease;z-index:10;">下一步 ▶</button>
+
+    <div id="flow-banner" style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(135deg,rgba(231,76,60,0.95),rgba(198,160,90,0.95));color:white;text-align:center;padding:0.75rem;font-family:'Playfair Display',serif;font-size:var(--h2-size);font-weight:700;letter-spacing:0.1em;opacity:0;transform:translateY(100%);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);">油走灰线 · 钱走暗道</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 12 — JUN MA案例解析 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="JUN MA案例解析">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>影子船队案例解析 — JUN MA</h2>
+    </div>
+    <div class="grid grid-2 reveal" style="flex:1;min-height:0;overflow:hidden;align-items:start;">
+      <div class="vessel-info-card">
+        <div class="vessel-field"><span class="vessel-field-label">IMO</span><span class="vessel-field-value">9290631</span></div>
+        <div class="vessel-field"><span class="vessel-field-label">类型</span><span class="vessel-field-value">Oil Tanker</span></div>
+        <div class="vessel-field"><span class="vessel-field-label">建造</span><span class="vessel-field-value">2004年（船龄约21年）</span></div>
+        <div class="vessel-field">
+          <span class="vessel-field-label">当前船旗</span>
+          <span class="vessel-field-value">🚩 冈比亚 <span class="risk-badge">高风险</span></span>
+        </div>
+        <div class="flag-history-box" style="margin-top:0.4em;">
+          <strong>换旗历史（9次）：</strong><br/>
+          冈比亚 → 坦桑尼亚 → 加蓬 → 蒙古 → 马绍尔群岛 → 德国 → 英国 → 圣基茨 → 不明
+        </div>
+        <p style="font-size:var(--small-size);color:var(--text-muted);margin-top:0.4em;"><strong>历史管理公司：</strong></p>
+        <ul class="blist" style="margin-top:0.2em;">
+          <li style="font-size:var(--small-size);">ELIZARIO SHIPPING</li>
+          <li style="font-size:var(--small-size);">HANA SHIPPING &amp; M...</li>
+          <li style="font-size:var(--small-size);">UNIC TANKER GEMI...</li>
+          <li style="font-size:var(--small-size);">CAISHAN SHIP MANA...</li>
+          <li style="font-size:var(--small-size);">GATIK SHIP MANAGE...</li>
+          <li style="font-size:var(--small-size);">TRAFIGURA MARITI...</li>
+        </ul>
+      </div>
+      <div style="overflow:auto;max-height:min(60vh,500px);">
+        <p style="font-size:var(--small-size);color:var(--gold);font-weight:600;margin-bottom:0.4em;">地理活动记录</p>
+        <table id="activity-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">日期<span class="sort-icon">⇅</span></th>
+              <th onclick="sortTable(1)">区域<span class="sort-icon">⇅</span></th>
+              <th onclick="sortTable(2)">来源<span class="sort-icon">⇅</span></th>
+            </tr>
+          </thead>
+          <tbody id="activity-tbody">
+            <tr><td>2025-09-12</td><td>东亚 — 韩国</td><td>MarineTraffic</td></tr>
+            <tr><td>2025-08-23</td><td>东南亚 — 马六甲海峡</td><td>VesselTracker</td></tr>
+            <tr><td>2025-07-15</td><td>南亚 — 印度洋</td><td>AXS Marine</td></tr>
+            <tr class="risk-high"><td>2025-06-08</td><td>地中海 — 利比亚 ⚠️</td><td>MarineTraffic</td></tr>
+            <tr class="risk-high"><td>2025-05-20</td><td>南美 — 委内瑞拉 ⚠️</td><td>VesselTracker</td></tr>
+            <tr><td>2025-04-11</td><td>东亚 — 中国（山东）</td><td>AXS Marine</td></tr>
+            <tr class="risk-high"><td>2025-03-03</td><td>中东 — 波斯湾 ⚠️</td><td>MarineTraffic</td></tr>
+            <tr><td>2025-01-28</td><td>东南亚 — 新加坡</td><td>VesselTracker</td></tr>
+            <tr><td>2024-12-15</td><td>南亚 — 巴基斯坦</td><td>AXS Marine</td></tr>
+            <tr><td>2024-11-07</td><td>东亚 — 中国（舟山）</td><td>MarineTraffic</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 13 — AIS欺骗手段 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="AIS操纵手段">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>AIS操纵与身份欺骗手段</h2>
+    </div>
+    <div class="grid grid-3 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3>📡 AIS关闭（Go Dark）</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>在敏感区域直接关闭AIS发射机</li>
+          <li>常见于进入伊朗/朝鲜近海前</li>
+          <li>"暗区"通常持续12–72小时</li>
+          <li>与历史轨迹出现明显断点</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🎭 AIS欺骗（Spoofing）</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>广播虚假位置或船舶身份信息</li>
+          <li>发送错误GPS坐标（常见于锚地打圈）</li>
+          <li>冒用其他合规船舶MMSI号码</li>
+          <li>可通过卫星AIS与陆基AIS数据比对发现</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🔄 船名/呼号更改</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>快速更换船名/呼号混淆追踪</li>
+          <li>IMO号是永久不变的唯一标识符</li>
+          <li>须通过IMO号而非船名核查</li>
+          <li>查阅历史船名数据库发现异常</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box reveal">
+      ⚠️ <strong>OFAC指南要求</strong>：发现AIS异常应立即暂停交易，保留记录，向合规部门汇报，不得仅凭船东解释继续操作
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 14 — 制裁规避常见模式 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="制裁规避常见模式">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>制裁规避常见模式</h2>
+    </div>
+    <ol class="num-list reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <li>
+        <div>
+          <strong>船到船转驳（STS）</strong>
+          <p>在公海进行未申报的船舶间货物转载，绕开港口监管，切断货物溯源链条</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>重新标注原产地</strong>
+          <p>通过中间港口（马来西亚、阿联酋）对受制裁货物进行"清洗"，更换原产地证</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>多层离岸架构</strong>
+          <p>通过BVI/开曼/巴拿马等地多层壳公司嵌套，隐匿真实受益所有人（UBO）</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>旗帜轮换</strong>
+          <p>利用弱监管"方便旗"国家（帕劳、冈比亚、坦桑尼亚）降低合规审查</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>拆分汇款（Structuring）</strong>
+          <p>将大额付款拆分为多笔，刻意控制在金融机构报告门槛（$10,000）之下</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>虚假贸易文件</strong>
+          <p>伪造提单（B/L）、原产地证（COO）、船舶证书等，使整个交易链条呈现合规假象</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 15 — 典型制裁案例 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="典型制裁案例">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>典型制裁违规案例</h2>
+    </div>
+    <div class="grid grid-3 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card tilt-card">
+        <div style="font-size:clamp(1.2rem,3vw,2rem);margin-bottom:0.3em;">🇺🇸</div>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">OFAC 2023</p>
+        <h3>伊朗石油制裁案</h3>
+        <div style="font-size:clamp(1rem,2.5vw,1.5rem);color:#E74C3C;font-family:'Playfair Display',serif;margin:0.3em 0;">$8.6亿</div>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">民事和解罚款</p>
+        <div class="gold-divider" style="margin:0.5em 0;"></div>
+        <p style="font-size:var(--small-size);">为受制裁的伊朗油轮提供加注服务，涉及多个中间商实体，最终追溯至服务供应商</p>
+      </div>
+      <div class="card tilt-card">
+        <div style="font-size:clamp(1.2rem,3vw,2rem);margin-bottom:0.3em;">🇪🇺</div>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">EU 2024</p>
+        <h3>俄罗斯影子船队案</h3>
+        <div style="font-size:clamp(0.9rem,2vw,1.2rem);color:#E74C3C;font-family:'Playfair Display',serif;margin:0.3em 0;">制裁名单+资产冻结</div>
+        <div class="gold-divider" style="margin:0.5em 0;"></div>
+        <p style="font-size:var(--small-size);">为俄罗斯受制裁油轮提供P&amp;I保险和加注服务，在欧盟成员国境内资产被全面冻结</p>
+      </div>
+      <div class="card tilt-card">
+        <div style="font-size:clamp(1.2rem,3vw,2rem);margin-bottom:0.3em;">🇺🇳</div>
+        <p style="font-size:var(--small-size);color:var(--text-muted);">UN 2023</p>
+        <h3>朝鲜制裁规避案</h3>
+        <div style="font-size:clamp(0.9rem,2vw,1.2rem);color:#E74C3C;font-family:'Playfair Display',serif;margin:0.3em 0;">船舶扣押+刑事起诉</div>
+        <div class="gold-divider" style="margin:0.5em 0;"></div>
+        <p style="font-size:var(--small-size);">向朝鲜非法转运燃油，利用"暗船"STS作业规避卫星监控，运营商被联合国专家组点名</p>
+      </div>
+    </div>
+    <div class="info-box reveal">
+      💡 制裁执法不分大小，服务提供商同样面临处罚。<strong>"不知道"不是免责理由</strong>——"应知而未知"同样构成违规
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 16 — CHAPTER 3 TITLE -->
+<!-- ============================================================ -->
+<section class="slide chapter-slide" data-title="第三章：典型合规风险场景">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;justify-content:center;gap:var(--element-gap);">
+    <div class="chapter-label reveal">第三章 · Chapter Three</div>
+    <div class="gold-divider reveal" style="width:60px;margin:0 auto;"></div>
+    <h1 class="reveal">典型合规风险场景</h1>
+    <p class="chapter-subtitle reveal">Typical Compliance Risk Scenarios</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 17 — 风险场景1：客户准入 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="风险场景1：客户准入">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>风险场景一：客户准入审查不足</h2>
+    </div>
+    <div class="grid grid-2 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3 style="color:#E74C3C;">⚠️ 典型风险点</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>船东信息模糊，注册在BVI/开曼等离岸地</li>
+          <li>受益所有人（UBO）未披露或信息模糊</li>
+          <li>船舶历史记录缺失，无法核实背景</li>
+          <li>代理人代为签约，真实委托人身份不明</li>
+          <li>船舶证书由非主流机构签发，效力存疑</li>
+          <li>要求免除常规KYC，以"紧急加注"为由</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:#2ECC71;">✅ 合规要求</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li><strong>KYC</strong> — 完整的客户尽职调查程序</li>
+          <li><strong>KYS</strong> — 船舶身份核实（Know Your Ship）</li>
+          <li><strong>UBO</strong> — 终极受益所有人核实（25%以上股权）</li>
+          <li><strong>IMO</strong> — 通过IMO号核实船舶注册状态</li>
+          <li><strong>制裁筛查</strong> — OFAC/EU/OFSI/UN全库核查</li>
+          <li><strong>增强尽调</strong> — 离岸架构须额外文件证明</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box reveal">
+      ⚠️ 客户以"时间紧迫"为由要求绕过KYC，或拒绝提供UBO信息，应视为<strong>重大风险信号</strong>，须立即暂停并上报
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 18 — 风险场景2：AIS监控 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="风险场景2：AIS监控">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>风险场景二：AIS异常未及时响应</h2>
+    </div>
+    <div class="timeline reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="timeline-item">
+        <div class="timeline-time">T+0h</div>
+        <div class="timeline-body">
+          <h3>初始状态</h3>
+          <p>收到加注订单，确认船舶位置正常（新加坡海峡，AIS显示正常），初步筛查未发现制裁命中</p>
+        </div>
+      </div>
+      <div class="timeline-item warning">
+        <div class="timeline-time" style="color:var(--gold);">T+2h ⚠️</div>
+        <div class="timeline-body">
+          <h3>异常出现</h3>
+          <p>AIS信号消失，船舶进入马六甲海峡后失联。操作员未触发内部预警机制，交易继续推进</p>
+        </div>
+      </div>
+      <div class="timeline-item danger">
+        <div class="timeline-time" style="color:#E74C3C;">T+48h 🚨</div>
+        <div class="timeline-body">
+          <h3>高风险事件</h3>
+          <p>AIS信号重现，但船舶位置已出现在波斯湾（伊朗近海）。疑似进行了未申报的STS作业</p>
+        </div>
+      </div>
+      <div class="timeline-item danger">
+        <div class="timeline-time" style="color:#E74C3C;">T+72h ❌</div>
+        <div class="timeline-body">
+          <h3>合规违规</h3>
+          <p>船舶靠港加注，操作员未核实48小时AIS历史断点，直接完成加注作业</p>
+        </div>
+      </div>
+    </div>
+    <div class="warning-box reveal">
+      🚨 <strong>风险后果</strong>：可能构成向受制裁目的地提供服务的次级制裁违规，OFAC罚款风险
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 19 — 风险场景3：付款路径 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="风险场景3：付款路径">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>风险场景三：付款路径异常</h2>
+    </div>
+    <div class="grid grid-3 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3 style="color:#E74C3C;">💸 第三方付款</h3>
+        <p>付款方与受益人不一致，资金来源无法核实，真实委托人身份不明</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🏝️ 离岸账户转账</h3>
+        <p>资金来自BVI/开曼账户，账户所在国属于高风险离岸司法管辖区</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">✂️ 拆单付款</h3>
+        <p>多笔金额刚好低于报告门槛，疑似蓄意规避反洗钱报告义务</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">⚡ 加急付款</h3>
+        <p>要求在正常合规审查时间（通常3–5个工作日）内完成，施压绕过审查程序</p>
+      </div>
+      <div class="card">
+        <h3 style="color:#E74C3C;">🔐 加密货币混用</h3>
+        <p>部分环节涉及数字资产，增加资金流向追踪难度</p>
+      </div>
+    </div>
+    <div class="info-box reveal">
+      💡 任何付款异常须触发增强尽调（EDD），并向合规部门汇报。不明来源资金须<strong>拒绝接受</strong>。
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 20 — 风险场景4：港口与货物 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="风险场景4：港口与货物">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>风险场景四：敏感港口与货物混合</h2>
+    </div>
+    <div class="grid grid-2 reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <div class="card">
+        <h3>🚫 高风险港口</h3>
+        <ul class="port-list" style="margin-top:0.5em;">
+          <li><span class="port-category">伊朗：</span>班达尔阿巴斯港、霍梅尼港、阿萨鲁耶港</li>
+          <li><span class="port-category">朝鲜：</span>南浦港、罗先港、清津港</li>
+          <li><span class="port-category">俄罗斯：</span>普里莫尔斯克港、维索茨克港、科兹米诺港</li>
+          <li><span class="port-category">委内瑞拉：</span>何塞港、拉瓜伊拉港、玻利瓦尔城港</li>
+          <li><span class="port-category">叙利亚：</span>拉塔基亚港、塔尔图斯港</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>⚠️ 货物混合风险</h3>
+        <ul class="blist" style="margin-top:0.5em;">
+          <li>LNG加注船同时承运受制裁货物（混用船舱）</li>
+          <li>油品与LNG共用加注设施，货物溯源困难</li>
+          <li>港口地理位置毗邻制裁地区，存在"接触风险"</li>
+          <li>加注后船舶立即前往制裁地区的轨迹模式</li>
+          <li>声称目的港与AIS实际航向不符</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 21 — 风险场景5：文件造假 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="风险场景5：文件核查">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>风险场景五：单据造假识别</h2>
+    </div>
+    <ul class="checklist reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <li><span class="check-label blue">核查要点</span>提单签发港口与船舶AIS历史记录是否一致</li>
+      <li><span class="check-label blue">核查要点</span>原产地证与货物实际来源是否匹配</li>
+      <li><span class="check-label blue">核查要点</span>船舶证书（船级证书、安全证书）有效期是否正常</li>
+      <li><span class="check-label blue">核查要点</span>P&amp;I保险保单是否来自知名互保协会（IG P&amp;I Club成员）</li>
+      <li><span class="check-label blue">核查要点</span>船管公司是否在OFAC/EU/OFSI制裁名单中</li>
+      <li><span class="check-label blue">核查要点</span>船舶注册证书与IMO数据库记录是否一致</li>
+      <li><span class="check-label red">红旗警示</span>文件缺少官方印章或授权签名，或印章模糊</li>
+      <li><span class="check-label red">红旗警示</span>文件版本与电子平台（如INTTRA、CargoSmart）记录不符</li>
+      <li><span class="check-label red">红旗警示</span>提单签发日期早于船舶实际到港日期</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 22 — CHAPTER 4 TITLE -->
+<!-- ============================================================ -->
+<section class="slide chapter-slide" data-title="第四章：合规实务建议">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content" style="align-items:center;text-align:center;justify-content:center;gap:var(--element-gap);">
+    <div class="chapter-label reveal">第四章 · Chapter Four</div>
+    <div class="gold-divider reveal" style="width:60px;margin:0 auto;"></div>
+    <h1 class="reveal">合规实务建议</h1>
+    <p class="chapter-subtitle reveal">Practical Compliance Recommendations</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 23 — 建立合规体系 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="建立合规管理体系">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>建立LNG加注合规管理体系</h2>
+    </div>
+    <div class="reveal">
+      <div class="tier tier-1">
+        <div class="tier-label">📋 制度层</div>
+        <div class="tier-body">
+          <h3>合规政策文件 · 制裁操作手册 · 业务红线清单 · 合规官授权机制</h3>
+          <p>建立覆盖全业务流程的制裁合规政策体系，明确禁止事项和授权层级</p>
+        </div>
+      </div>
+      <div class="tier tier-2">
+        <div class="tier-label">⚙️ 流程层</div>
+        <div class="tier-body">
+          <h3>客户准入 → 交易前审查 → 操作过程监控 → 操作后复盘 → 定期回顾</h3>
+          <p>全流程嵌入合规检查节点，确保每个关键环节均有审批记录</p>
+        </div>
+      </div>
+      <div class="tier tier-3">
+        <div class="tier-label">🛠️ 工具层</div>
+        <div class="tier-body">
+          <h3>制裁筛查数据库 · AIS历史监控平台 · KYC系统 · 文件管理平台</h3>
+          <p>以技术工具支撑合规流程，减少人为疏漏风险，提升审查效率</p>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-3 reveal" style="margin-top:var(--element-gap);">
+      <div class="card">
+        <h3>📊 数据订阅</h3>
+        <p>订阅OFAC/EU/OFSI实时更新推送，确保名单每日自动同步</p>
+      </div>
+      <div class="card">
+        <h3>👥 培训体系</h3>
+        <p>每年至少一次制裁合规培训，覆盖前台、合规、财务全体员工</p>
+      </div>
+      <div class="card">
+        <h3>🔔 预警机制</h3>
+        <p>建立AIS异常、制裁命中、付款异常三级预警响应SOP</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 24 — 实操建议清单 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="合规实操建议">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content">
+    <div class="slide-header reveal">
+      <h2>合规实操核心建议</h2>
+    </div>
+    <ol class="num-list reveal" style="flex:1;min-height:0;overflow:hidden;">
+      <li>
+        <div>建立制裁观察名单数据库（OFAC SDN + EU + UN + OFSI）并每日自动更新，确保无延迟命中</div>
+      </li>
+      <li>
+        <div>所有客户准入必须完成UBO核查，BVI/开曼架构须额外提交公证文件进行增强尽职调查（EDD）</div>
+      </li>
+      <li>
+        <div>加注前强制核查船舶最近30天AIS历史记录，重点关注任何不明原因的"消失"时间段</div>
+      </li>
+      <li>
+        <div>付款审查须核实付款方与受益人一致性，严格拒绝任何形式的第三方付款安排</div>
+      </li>
+      <li>
+        <div>合同中加入国际通行制裁条款（Sanctions Clause），明确制裁触发的即时终止权和免责机制</div>
+      </li>
+      <li>
+        <div>建立制裁命中应急响应SOP：立即冻结交易 → 汇报链启动 → 法律顾问介入 → 监管机构沟通</div>
+      </li>
+      <li>
+        <div>每年至少开展一次制裁合规专项培训，并通过模拟演练检验合规程序的有效性</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 25 — 结语 -->
+<!-- ============================================================ -->
+<section class="slide" data-title="结语">
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+  <div class="slide-content" style="justify-content:center;align-items:center;text-align:center;gap:var(--content-gap);">
+    <h2 class="reveal" style="color:var(--text-muted);font-size:var(--h3-size);">结语</h2>
+    <div class="big-quote reveal">
+      合规不是成本，而是可持续经营的基础
+    </div>
+    <div class="gold-divider reveal" style="width:clamp(80px,15vw,200px);margin:0 auto;"></div>
+    <p class="reveal" style="max-width:min(80vw,600px);color:var(--text-secondary);line-height:1.8;">
+      在LNG加注这一新兴业务领域，制裁风险防范需要前置于业务发展之中。只有建立系统化的合规文化，才能在国际市场中行稳致远。
+    </p>
+    <div class="conclusion-footer reveal">
+      <span>联系方式</span>
+      <span class="sep">|</span>
+      <span>如需详细合规咨询，请联系法务合规部门</span>
+    </div>
+    <small class="reveal" style="color:var(--text-muted);">© 2025 合规管理实务指南 · 仅供内部培训使用</small>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT -->
+<!-- ============================================================ -->
+<script>
+/* ===== SORTABLE TABLE ===== */
+function sortTable(colIdx) {
+    const tbody = document.getElementById('activity-tbody');
+    if (!tbody) return;
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const dir = tbody.dataset.sortDir === 'asc' ? 'desc' : 'asc';
+    tbody.dataset.sortDir = dir;
+    tbody.dataset.sortCol = colIdx;
+    rows.sort((a, b) => {
+        const aVal = a.cells[colIdx].textContent.trim();
+        const bVal = b.cells[colIdx].textContent.trim();
+        return dir === 'asc' ? aVal.localeCompare(bVal, 'zh') : bVal.localeCompare(aVal, 'zh');
+    });
+    rows.forEach(r => tbody.appendChild(r));
+    document.querySelectorAll('#activity-table th .sort-icon').forEach((ic, i) => {
+        ic.textContent = i === colIdx ? (dir === 'asc' ? '↑' : '↓') : '⇅';
+    });
+}
+
+/* ===== WORLD MAP ANIMATION ===== */
+(function() {
+    const steps = [
+        { show: ['node-iran'], lines: [] },
+        { show: ['node-uae'], lines: ['line-iran-uae'] },
+        { show: ['node-oman'], lines: ['line-oman-sd'] },
+        { show: ['node-hk'], lines: ['line-uae-hk'] },
+        { show: ['node-shandong'], lines: ['line-sd-hk'] },
+        { show: [], lines: ['line-sd-hk2'] },
+        { show: ['node-dubai'], lines: ['line-hk-dubai'] },
+        { show: [], lines: [] },
+        { show: ['node-bvi'], lines: ['line-dubai-bvi1'] },
+        { show: [], lines: ['line-dubai-bvi2'] },
+        { show: ['node-turkey'], lines: ['line-bvi-turkey', 'line-turkey-iran'] },
+    ];
+    let currentStep = 0;
+
+    window.nextStep = function() {
+        if (currentStep >= steps.length) {
+            document.getElementById('flow-banner').classList.add('visible');
+            document.getElementById('next-step-btn').disabled = true;
+            return;
+        }
+        const step = steps[currentStep];
+        step.show.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.transition = 'opacity 0.5s ease';
+                el.style.opacity = '1';
+                el.classList.add('visible');
+            }
+        });
+        step.lines.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('visible');
+                el.style.opacity = '1';
+                const len = el.getTotalLength ? el.getTotalLength() : 400;
+                el.style.strokeDasharray = len;
+                el.style.strokeDashoffset = len;
+                requestAnimationFrame(() => {
+                    el.style.transition = 'stroke-dashoffset 1s ease';
+                    el.style.strokeDashoffset = '0';
+                });
+            }
+        });
+        currentStep++;
+        document.getElementById('step-counter').textContent = currentStep + ' / 11';
+        if (currentStep >= steps.length) {
+            setTimeout(() => {
+                document.getElementById('flow-banner').classList.add('visible');
+                document.getElementById('next-step-btn').disabled = true;
+            }, 1200);
+        }
+    };
+})();
+
+/* ===== SLIDE PRESENTATION CLASS ===== */
+class SlidePresentation {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.totalSlides = this.slides.length;
+        this.currentSlide = 0;
+        this.isScrolling = false;
+        this.init();
+    }
+    init() {
+        this.setupNavDots();
+        this.setupProgressBar();
+        this.setupKeyboard();
+        this.setupTouch();
+        this.setupWheel();
+        this.setupIntersectionObserver();
+        this.setupTiltEffect();
+        this.setupCounterAnimations();
+    }
+    setupNavDots() {
+        const nav = document.getElementById('nav-dots');
+        if (!nav) return;
+        this.slides.forEach((slide, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'nav-dot';
+            dot.setAttribute('aria-label', slide.dataset.title || ('Slide ' + (i+1)));
+            dot.setAttribute('title', slide.dataset.title || '');
+            dot.addEventListener('click', () => this.goTo(i));
+            nav.appendChild(dot);
+        });
+        this.updateNavDots();
+    }
+    setupProgressBar() {
+        this.progressBar = document.getElementById('progress-bar');
+        this.updateProgress();
+    }
+    updateProgress() {
+        if (this.progressBar) {
+            const pct = this.totalSlides > 1 ? (this.currentSlide / (this.totalSlides - 1)) * 100 : 0;
+            this.progressBar.style.width = pct + '%';
+        }
+    }
+    updateNavDots() {
+        document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === this.currentSlide);
+        });
+        this.updateProgress();
+    }
+    goTo(index) {
+        if (index < 0 || index >= this.totalSlides) return;
+        this.currentSlide = index;
+        this.slides[index].scrollIntoView({ behavior: 'smooth' });
+        this.updateNavDots();
+    }
+    next() { this.goTo(this.currentSlide + 1); }
+    prev() { this.goTo(this.currentSlide - 1); }
+    setupKeyboard() {
+        document.addEventListener('keydown', (e) => {
+            const animSlide = document.getElementById('slide-animation');
+            if (animSlide && animSlide.classList.contains('visible')) {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    window.nextStep && window.nextStep();
+                    return;
+                }
+            }
+            switch(e.key) {
+                case 'ArrowDown': case 'ArrowRight': case ' ': e.preventDefault(); this.next(); break;
+                case 'ArrowUp': case 'ArrowLeft': e.preventDefault(); this.prev(); break;
+                case 'PageDown': e.preventDefault(); this.next(); break;
+                case 'PageUp': e.preventDefault(); this.prev(); break;
+            }
+        });
+    }
+    setupTouch() {
+        let startY = 0, startX = 0;
+        document.addEventListener('touchstart', e => {
+            startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const dy = startY - e.changedTouches[0].clientY;
+            const dx = startX - e.changedTouches[0].clientX;
+            if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 50) {
+                dy > 0 ? this.next() : this.prev();
+            }
+        });
+    }
+    setupWheel() {
+        let timeout;
+        document.addEventListener('wheel', (e) => {
+            if (timeout) return;
+            e.deltaY > 0 ? this.next() : this.prev();
+            timeout = setTimeout(() => { timeout = null; }, 800);
+        }, { passive: true });
+    }
+    setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const slides = Array.from(this.slides);
+                    const idx = slides.indexOf(entry.target);
+                    if (idx !== -1) {
+                        this.currentSlide = idx;
+                        this.updateNavDots();
+                    }
+                    entry.target.querySelectorAll('[data-count]').forEach(el => {
+                        if (!el.dataset.animated) {
+                            el.dataset.animated = '1';
+                            this.animateCounter(el, parseInt(el.dataset.count), el.dataset.suffix || '');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+        this.slides.forEach(s => observer.observe(s));
+    }
+    animateCounter(el, target, suffix) {
+        suffix = suffix || '';
+        let start = 0;
+        const duration = 1500;
+        const step = timestamp => {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target) + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }
+    setupTiltEffect() {
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                card.style.transform = 'perspective(600px) rotateX(' + (-y*8) + 'deg) rotateY(' + (x*8) + 'deg) translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+        });
+    }
+    setupCounterAnimations() { /* handled in IntersectionObserver */ }
+}
+
+document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+</script>
+</body>
+</html>
