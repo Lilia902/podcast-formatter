@@ -1046,7 +1046,7 @@ const STORE_KEY = 'pupu-vocab-db';
 
 function loadVocab() {
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
-  catch { return []; }
+  catch (e) { console.error('词库数据读取失败，已重置:', e); return []; }
 }
 
 function saveVocab(list) {
@@ -1063,7 +1063,10 @@ let tagFilter    = '';
 
 /* ─── Utilities ─── */
 function uid() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 }
 
 function fmtDate(ts) {
@@ -1074,7 +1077,9 @@ function fmtDate(ts) {
 function startOfWeek() {
   const d = new Date();
   d.setHours(0,0,0,0);
-  d.setDate(d.getDate() - d.getDay());
+  // Monday as first day of week (ISO standard, common in China)
+  const day = d.getDay();
+  d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
   return d.getTime();
 }
 
@@ -1155,35 +1160,114 @@ function buildCard(word) {
 
   const hasExtra = word.example || word.notes;
 
-  div.innerHTML = `
-    <div class="card-header">
-      <div class="card-word-block">
-        <div class="card-word">${escHtml(word.word)}</div>
-        ${word.phonetic ? `<div class="card-phonetic">${escHtml(word.phonetic)}</div>` : ''}
-      </div>
-      <div class="card-actions">
-        <button class="card-btn edit"   onclick="startEdit('${word.id}')" title="编辑">✏️</button>
-        <button class="card-btn delete" onclick="openDeleteModal('${word.id}')" title="删除">🗑️</button>
-      </div>
-    </div>
-    <div class="card-definition">${escHtml(word.definition || '')}</div>
-    ${hasExtra ? `
-    <div class="card-expandable" id="expand-${word.id}">
-      ${word.example ? `<div class="card-example"><strong>例：</strong>${escHtml(word.example)}</div>` : ''}
-      ${word.notes   ? `<div class="card-notes"><span class="notes-label">备注</span><span>${escHtml(word.notes)}</span></div>` : ''}
-    </div>
-    <button class="card-expand-btn" id="expbtn-${word.id}" onclick="toggleExpand('${word.id}')">
-      展开详情 ▾
-    </button>` : ''}
-    <div class="card-footer">
-      <div class="card-tags">
-        ${(word.tags || []).map(t =>
-          `<span class="card-tag" onclick="filterByTag('${escHtml(t)}')" title="筛选此标签">${escHtml(t)}</span>`
-        ).join('')}
-      </div>
-      <span class="card-date">${fmtDate(word.createdAt)}</span>
-    </div>
-  `;
+  const editBtn   = document.createElement('button');
+  editBtn.className = 'card-btn edit';
+  editBtn.title = '编辑';
+  editBtn.textContent = '✏️';
+  editBtn.dataset.action = 'edit';
+  editBtn.dataset.id = word.id;
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = 'card-btn delete';
+  deleteBtn.title = '删除';
+  deleteBtn.textContent = '🗑️';
+  deleteBtn.dataset.action = 'delete';
+  deleteBtn.dataset.id = word.id;
+
+  const actionsDiv = document.createElement('div');
+  actionsDiv.className = 'card-actions';
+  actionsDiv.appendChild(editBtn);
+  actionsDiv.appendChild(deleteBtn);
+
+  const wordEl = document.createElement('div');
+  wordEl.className = 'card-word';
+  wordEl.textContent = word.word;
+
+  const wordBlock = document.createElement('div');
+  wordBlock.className = 'card-word-block';
+  wordBlock.appendChild(wordEl);
+
+  if (word.phonetic) {
+    const phoneticEl = document.createElement('div');
+    phoneticEl.className = 'card-phonetic';
+    phoneticEl.textContent = word.phonetic;
+    wordBlock.appendChild(phoneticEl);
+  }
+
+  const headerDiv = document.createElement('div');
+  headerDiv.className = 'card-header';
+  headerDiv.appendChild(wordBlock);
+  headerDiv.appendChild(actionsDiv);
+
+  const defDiv = document.createElement('div');
+  defDiv.className = 'card-definition';
+  defDiv.textContent = word.definition || '';
+
+  div.appendChild(headerDiv);
+  div.appendChild(defDiv);
+
+  if (hasExtra) {
+    const expandable = document.createElement('div');
+    expandable.className = 'card-expandable';
+    expandable.id = 'expand-' + word.id;
+
+    if (word.example) {
+      const exDiv = document.createElement('div');
+      exDiv.className = 'card-example';
+      const strong = document.createElement('strong');
+      strong.textContent = '例：';
+      exDiv.appendChild(strong);
+      exDiv.appendChild(document.createTextNode(word.example));
+      expandable.appendChild(exDiv);
+    }
+
+    if (word.notes) {
+      const notesDiv = document.createElement('div');
+      notesDiv.className = 'card-notes';
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'notes-label';
+      labelSpan.textContent = '备注';
+      const notesSpan = document.createElement('span');
+      notesSpan.textContent = word.notes;
+      notesDiv.appendChild(labelSpan);
+      notesDiv.appendChild(notesSpan);
+      expandable.appendChild(notesDiv);
+    }
+
+    const expandBtn = document.createElement('button');
+    expandBtn.className = 'card-expand-btn';
+    expandBtn.id = 'expbtn-' + word.id;
+    expandBtn.textContent = '展开详情 ▾';
+    expandBtn.dataset.action = 'expand';
+    expandBtn.dataset.id = word.id;
+
+    div.appendChild(expandable);
+    div.appendChild(expandBtn);
+  }
+
+  const footerDiv = document.createElement('div');
+  footerDiv.className = 'card-footer';
+
+  const tagsDiv = document.createElement('div');
+  tagsDiv.className = 'card-tags';
+  (word.tags || []).forEach(t => {
+    const tagEl = document.createElement('span');
+    tagEl.className = 'card-tag';
+    tagEl.textContent = t;
+    tagEl.title = '筛选此标签';
+    tagEl.dataset.action = 'filter-tag';
+    tagEl.dataset.tag = t;
+    tagsDiv.appendChild(tagEl);
+  });
+
+  const dateEl = document.createElement('span');
+  dateEl.className = 'card-date';
+  dateEl.textContent = fmtDate(word.createdAt);
+
+  footerDiv.appendChild(tagsDiv);
+  footerDiv.appendChild(dateEl);
+  div.appendChild(footerDiv);
+
   return div;
 }
 
@@ -1234,12 +1318,22 @@ function clearTagFilter() {
 /* ─── Tag form helpers ─── */
 function renderSelectedTags() {
   const el = document.getElementById('selectedTags');
-  el.innerHTML = selectedTags.map(t => `
-    <span class="selected-tag">
-      ${escHtml(t)}
-      <button class="remove-tag" onclick="removeTag('${escHtml(t)}')" title="移除">×</button>
-    </span>
-  `).join('');
+  el.innerHTML = '';
+  selectedTags.forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'selected-tag';
+    span.textContent = t;
+
+    const btn = document.createElement('button');
+    btn.className = 'remove-tag';
+    btn.title = '移除';
+    btn.textContent = '×';
+    btn.dataset.tag = t;
+    btn.dataset.action = 'remove-tag';
+
+    span.appendChild(btn);
+    el.appendChild(span);
+  });
 
   // sync suggestion chips
   document.querySelectorAll('#tagSuggestions .tag-chip').forEach(chip => {
@@ -1299,7 +1393,11 @@ async function autoFetchPhonetic() {
       { signal: fetchController.signal }
     );
 
-    if (!resp.ok) throw new Error('not found');
+    if (!resp.ok) {
+      if (resp.status === 404) throw new Error('not found');
+      if (resp.status === 429) throw new Error('rate limited');
+      throw new Error('server error');
+    }
     const data = await resp.json();
     const entry = data[0];
 
@@ -1321,8 +1419,14 @@ async function autoFetchPhonetic() {
     }
   } catch (err) {
     if (err.name === 'AbortError') return;
+    const isNetworkErr = err instanceof TypeError;
+    const isRateLimited = err.message === 'rate limited';
     status.className = 'field-hint error';
-    status.textContent = '查询失败，请手动输入音标';
+    status.textContent = isNetworkErr
+      ? '网络连接失败，请手动输入音标'
+      : isRateLimited
+        ? '请求过于频繁，请稍后再试'
+        : '未找到该词条，请手动输入音标';
   } finally {
     btn.classList.remove('loading');
     btn.textContent = '⚡ 音标';
@@ -1503,6 +1607,25 @@ function importVocab(e) {
 /* ─── Close modal on overlay click ─── */
 document.getElementById('deleteModal').addEventListener('click', e => {
   if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
+});
+
+/* ─── Event delegation: word list (edit / delete / expand / tag-filter) ─── */
+document.getElementById('wordList').addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const id     = btn.dataset.id;
+  const tag    = btn.dataset.tag;
+  if (action === 'edit')       startEdit(id);
+  else if (action === 'delete') openDeleteModal(id);
+  else if (action === 'expand') toggleExpand(id);
+  else if (action === 'filter-tag') filterByTag(tag);
+});
+
+/* ─── Event delegation: selected tags remove buttons ─── */
+document.getElementById('selectedTags').addEventListener('click', e => {
+  const btn = e.target.closest('[data-action="remove-tag"]');
+  if (btn) removeTag(btn.dataset.tag);
 });
 
 /* ─── Keyboard shortcut ─── */
