@@ -907,7 +907,8 @@
 
   <div class="header-actions">
     <button class="btn-ghost" onclick="exportVocab()">导出 JSON</button>
-    <label class="btn-ghost" for="importFile" style="cursor:pointer">导入 JSON</label>
+    <label class="btn-ghost" for="importFile" style="cursor:pointer"
+           tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){document.getElementById('importFile').click()}">导入 JSON</label>
     <input id="importFile" type="file" accept=".json" onchange="importVocab(event)" style="display:none">
   </div>
 </header>
@@ -938,7 +939,7 @@
 
       <!-- Phonetic -->
       <div class="form-field">
-        <label>音标 <span class="label-hint">IPA 国际音标（可自动获取）</span></label>
+        <label>音标 <span class="label-hint">IPA 国际音标（⚡ 仅支持英文单词自动获取）</span></label>
         <input id="fPhonetic" type="text" placeholder="e.g. /ˈmærɪtaɪm/" autocomplete="off">
         <div id="phoneticStatus" class="field-hint"></div>
       </div>
@@ -1271,20 +1272,12 @@ function buildCard(word) {
   return div;
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
 function toggleExpand(id) {
   const el  = document.getElementById('expand-' + id);
   const btn = document.getElementById('expbtn-' + id);
   if (!el) return;
   const open = el.classList.toggle('open');
-  btn.innerHTML = open ? '收起详情 ▴' : '展开详情 ▾';
+  btn.textContent = open ? '收起详情 ▴' : '展开详情 ▾';
 }
 
 /* ─── Search & Filter ─── */
@@ -1503,9 +1496,13 @@ function startEdit(id) {
   selectedTags = [...(w.tags || [])];
   renderSelectedTags();
 
-  // Update form title
-  document.getElementById('formTitle').innerHTML =
-    `✏️ 编辑词条 <span class="edit-badge">${escHtml(w.word)}</span>`;
+  // Update form title using safe DOM manipulation
+  const titleEl = document.getElementById('formTitle');
+  titleEl.textContent = '✏️ 编辑词条 ';
+  const badge = document.createElement('span');
+  badge.className = 'edit-badge';
+  badge.textContent = w.word;
+  titleEl.appendChild(badge);
   document.getElementById('btnCancel').style.display = '';
   document.getElementById('btnSave').textContent = '保存修改';
 
