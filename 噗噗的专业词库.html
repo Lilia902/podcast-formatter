@@ -8,52 +8,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ═══════════════════════════════════════════
-       CSS Variables – Premium Warm Palette
-    ═══════════════════════════════════════════ */
+    /* ─── Variables ─── */
     :root {
-      --bg:           #F4F0E8;
-      --bg-deep:      #EAE5DA;
-      --card:         #FFFFFF;
-      --card-hover:   #FDFCF9;
-      --header-bg:    #16120D;
-      --header-text:  #F4F0E8;
-      --accent:       #B8860B;
-      --accent-dim:   #8A6508;
-      --accent-light: #F5E8C0;
-      --accent-glow:  rgba(184,134,11,0.15);
-      --text:         #1C1814;
-      --text-mid:     #5C5346;
-      --text-muted:   #9A8E80;
-      --border:       #DDD6C8;
-      --border-light: #EDE8DE;
-      --input-bg:     #FAFAF6;
-      --phonetic:     #3A7A55;
-      --phonetic-bg:  #EBF5EF;
-      --tag-bg:       #EDE8DE;
-      --tag-text:     #4A4035;
-      --tag-active-bg: #B8860B;
-      --tag-active-text: #FFF8E8;
-      --danger:       #B91C1C;
-      --danger-light: #FEE2E2;
-      --success:      #15803D;
-      --radius:       14px;
-      --radius-sm:    8px;
-      --radius-xs:    5px;
-      --shadow:       0 2px 16px rgba(22,18,13,0.07);
-      --shadow-md:    0 4px 24px rgba(22,18,13,0.10);
-      --shadow-lg:    0 12px 48px rgba(22,18,13,0.14);
-      --font-serif:   'EB Garamond', 'Georgia', serif;
-      --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+      --bg:         #F6F4EF;
+      --card:       #FFFFFF;
+      --inp:        #FEFCF9;
+      --text:       #1A1714;
+      --mid:        #52493F;
+      --muted:      #96887A;
+      --border:     #E3DDD4;
+      --border-f:   #1A1714;
+      --green:      #2D7A4F;
+      --red:        #B91C1C;
+      --gold:       #8A6508;
+      --gold-bg:    #FBF3DB;
+      --radius:     10px;
+      --radius-s:   6px;
+      --font-serif: 'EB Garamond', Georgia, serif;
+      --font-sans:  'Inter', -apple-system, 'PingFang SC', sans-serif;
+      --sh:         0 1px 6px rgba(0,0,0,0.05);
+      --sh-md:      0 4px 20px rgba(0,0,0,0.09);
     }
 
-    /* ═══════════════════════════════════════════
-       Reset & Base
-    ═══════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { font-size: 15px; }
-
     body {
       font-family: var(--font-sans);
       background: var(--bg);
@@ -62,975 +40,739 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ═══════════════════════════════════════════
-       Header
-    ═══════════════════════════════════════════ */
-    .header {
-      background: var(--header-bg);
-      color: var(--header-text);
-      padding: 0 32px;
-      height: 72px;
+    /* ─── Header ─── */
+    .hd {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 48px;
       display: flex;
       align-items: center;
-      gap: 24px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 24px rgba(0,0,0,0.3);
+      justify-content: space-between;
+      gap: 20px;
     }
-
-    .header-brand {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .header-title {
+    .hd-title {
       font-family: var(--font-serif);
-      font-size: 22px;
+      font-size: 26px;
       font-weight: 600;
-      letter-spacing: 0.01em;
-      color: #F4F0E8;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: var(--text);
+      line-height: 1.2;
     }
-
-    .header-title .accent-dot {
-      color: var(--accent);
-    }
-
-    .header-subtitle {
+    .hd-sub {
       font-family: var(--font-serif);
       font-style: italic;
-      font-size: 12px;
-      color: #907E6A;
-      letter-spacing: 0.03em;
-      margin-top: 1px;
-    }
-
-    .header-stats {
-      display: flex;
-      gap: 20px;
-      flex-shrink: 0;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-value {
-      display: block;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-    }
-
-    .stat-label {
-      display: block;
-      font-size: 10px;
-      color: #706050;
+      font-size: 13px;
+      color: var(--muted);
       margin-top: 2px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
     }
-
-    .header-divider {
-      width: 1px;
-      height: 32px;
-      background: #302820;
-      flex-shrink: 0;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .btn-ghost {
-      padding: 6px 14px;
-      border: 1px solid #3A3020;
-      border-radius: var(--radius-xs);
-      background: transparent;
-      color: #C0A878;
-      font-family: var(--font-sans);
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(184,134,11,0.08);
-    }
-
-    /* ═══════════════════════════════════════════
-       App Body Layout
-    ═══════════════════════════════════════════ */
-    .app-body {
-      display: flex;
-      height: calc(100vh - 72px);
-      overflow: hidden;
-    }
-
-    /* ═══════════════════════════════════════════
-       Left Sidebar (Form)
-    ═══════════════════════════════════════════ */
-    .sidebar {
-      width: 360px;
-      min-width: 320px;
-      background: var(--card);
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
-      flex-shrink: 0;
-    }
-
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    .form-card {
-      padding: 28px 24px;
-    }
-
-    .form-section-title {
-      font-family: var(--font-serif);
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 22px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-light);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .form-section-title .edit-badge {
-      font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 600;
-      background: var(--accent-light);
-      color: var(--accent-dim);
-      padding: 2px 8px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-    }
-
-    .form-field {
-      margin-bottom: 16px;
-    }
-
-    .form-field label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-    }
-
-    .label-hint {
-      font-size: 10px;
-      font-weight: 400;
-      color: var(--text-muted);
-      text-transform: none;
-      letter-spacing: 0;
-      margin-left: 4px;
-    }
-
-    .form-field input[type="text"],
-    .form-field textarea {
-      width: 100%;
-      padding: 9px 12px;
-      background: var(--input-bg);
+    .hd-right { display: flex; align-items: center; gap: 18px; }
+    .hd-stats { text-align: right; }
+    .hd-today { font-size: 15px; font-weight: 600; color: var(--text); }
+    .hd-today em { font-style: normal; color: var(--muted); font-weight: 400; }
+    .hd-week { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .hd-export-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .hd-export-btn:hover { border-color: var(--text); color: var(--text); }
+
+    /* ─── Tab Bar ─── */
+    .tabs {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      display: flex;
+    }
+    .tab-btn {
+      padding: 15px 22px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
       font-family: var(--font-sans);
       font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: color 0.15s;
+      margin-bottom: -1px;
+      white-space: nowrap;
+    }
+    .tab-btn.on { color: var(--text); border-bottom-color: var(--text); font-weight: 600; }
+    .tab-btn:hover:not(.on) { color: var(--mid); }
+    .tab-ico { font-size: 9px; opacity: 0.8; }
+
+    /* ─── Page visibility ─── */
+    .pg { display: none; }
+    .pg.on { display: block; }
+
+    /* ════════════════════════════════
+       ADD PAGE
+    ════════════════════════════════ */
+    .add-pg {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 44px 48px 72px;
+    }
+
+    /* Edit-mode banner */
+    .edit-banner {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 16px;
+      background: var(--gold-bg);
+      border: 1px solid #E8CC78;
+      border-radius: var(--radius-s);
+      margin-bottom: 30px;
+      font-size: 13.5px;
+      color: var(--mid);
+    }
+    .edit-banner strong { color: var(--text); }
+    .edit-banner button {
+      margin-left: auto;
+      background: none; border: none;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; text-decoration: underline;
+    }
+
+    /* Form row grid */
+    .f-row       { display: grid; gap: 24px; margin-bottom: 22px; }
+    .f-row.cols2 { grid-template-columns: 1fr 1fr; }
+    .f-row.cols1 { grid-template-columns: 1fr; }
+    .f-field { display: flex; flex-direction: column; gap: 8px; }
+
+    .f-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .f-lbl .req { color: var(--mid); }
+    .f-lbl .hint {
+      font-weight: 400; text-transform: none;
+      letter-spacing: 0; font-size: 10px;
+    }
+
+    .f-inp {
+      width: 100%;
+      padding: 13px 15px;
+      background: var(--inp);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-s);
+      font-family: var(--font-sans);
+      font-size: 15px;
       color: var(--text);
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s;
       resize: vertical;
-      min-height: unset;
-    }
-
-    .form-field input[type="text"]:focus,
-    .form-field textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .form-field textarea {
       line-height: 1.55;
     }
+    .f-inp:focus { outline: none; border-color: var(--border-f); }
+    .f-inp::placeholder { color: var(--muted); }
 
-    .input-with-action {
-      display: flex;
-      gap: 6px;
-    }
-
-    .input-with-action input {
-      flex: 1;
-    }
-
-    .btn-fetch {
-      padding: 0 10px;
-      background: var(--bg-deep);
+    /* Phonetic row: input + Auto button side-by-side */
+    .ph-row { display: flex; gap: 6px; }
+    .ph-row .f-inp { flex: 1; }
+    .btn-auto {
+      flex-shrink: 0;
+      padding: 13px 16px;
+      background: var(--inp);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text-mid);
+      border-radius: var(--radius-s);
       font-family: var(--font-sans);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
+      color: var(--mid);
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s;
-      flex-shrink: 0;
     }
+    .btn-auto:hover { border-color: var(--mid); color: var(--text); }
+    .btn-auto.spin { opacity: 0.5; pointer-events: none; }
 
-    .btn-fetch:hover {
-      background: var(--accent-light);
-      border-color: var(--accent);
-      color: var(--accent-dim);
-    }
+    .f-status { font-size: 11px; color: var(--muted); min-height: 14px; }
+    .f-status.ok  { color: var(--green); }
+    .f-status.err { color: var(--red); }
 
-    .btn-fetch.loading {
-      opacity: 0.6;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .field-hint {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      min-height: 16px;
-      transition: color 0.2s;
-    }
-
-    .field-hint.success { color: var(--success); }
-    .field-hint.error   { color: var(--danger);  }
-    .field-hint.loading { color: var(--accent);  }
-
-    /* Tag suggestions */
-    .tag-suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .tag-chip {
-      padding: 4px 10px;
-      background: var(--tag-bg);
+    /* Category chips */
+    .cat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cat-chip {
+      padding: 8px 16px;
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 24px;
       font-family: var(--font-sans);
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 500;
-      color: var(--tag-text);
+      color: var(--mid);
       cursor: pointer;
       transition: all 0.15s;
     }
-
-    .tag-chip:hover,
-    .tag-chip.active {
-      background: var(--accent-light);
-      border-color: var(--accent);
-      color: var(--accent-dim);
-    }
-
-    .selected-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 8px;
-      min-height: 26px;
-    }
-
-    .selected-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 8px 3px 10px;
-      background: var(--accent-light);
-      border: 1px solid var(--accent);
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--accent-dim);
-    }
-
-    .selected-tag .remove-tag {
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      opacity: 0.6;
-      background: none;
-      border: none;
-      color: inherit;
-      padding: 0;
-      transition: opacity 0.15s;
-    }
-
-    .selected-tag .remove-tag:hover { opacity: 1; }
+    .cat-chip:hover { border-color: var(--mid); color: var(--text); }
+    .cat-chip.on { background: var(--text); border-color: var(--text); color: white; }
 
     /* Form actions */
-    .form-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border-light);
+    .f-actions {
+      display: flex; justify-content: flex-end; gap: 12px;
+      margin-top: 32px; padding-top: 24px;
+      border-top: 1px solid var(--border);
     }
-
-    .btn-primary {
-      flex: 1;
-      padding: 10px 16px;
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 600;
-      color: #FFF8E8;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      letter-spacing: 0.03em;
-    }
-
-    .btn-primary:hover { background: var(--accent-dim); }
-    .btn-primary:active { transform: scale(0.98); }
-
-    .btn-secondary {
-      padding: 10px 16px;
+    .btn-sec {
+      padding: 11px 24px;
       background: transparent;
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-mid);
-      cursor: pointer;
-      transition: all 0.2s;
+      border-radius: var(--radius-s);
+      font-family: var(--font-sans); font-size: 14px;
+      color: var(--mid); cursor: pointer; transition: all 0.2s;
     }
-
-    .btn-secondary:hover {
-      border-color: var(--text-mid);
-      color: var(--text);
+    .btn-sec:hover { border-color: var(--mid); color: var(--text); }
+    .btn-pri {
+      padding: 11px 32px;
+      background: var(--text); border: none;
+      border-radius: var(--radius-s);
+      font-family: var(--font-sans); font-size: 14px;
+      font-weight: 600; color: white;
+      cursor: pointer; transition: opacity 0.2s;
     }
+    .btn-pri:hover { opacity: 0.82; }
 
-    /* ═══════════════════════════════════════════
-       Main Word List Area
-    ═══════════════════════════════════════════ */
-    .word-list-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-width: 0;
-    }
-
-    .list-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 28px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border-light);
-      flex-shrink: 0;
-    }
-
-    .search-box {
-      flex: 1;
-      max-width: 420px;
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 11px;
-      font-size: 14px;
-      pointer-events: none;
-      opacity: 0.5;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 8px 32px 8px 34px;
+    /* ════════════════════════════════
+       LIBRARY PAGE
+    ════════════════════════════════ */
+    .lib-bar {
       background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 48px;
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap;
+    }
+    .srch { position: relative; max-width: 380px; flex: 1; }
+    .srch-ico {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px; pointer-events: none; opacity: 0.45;
+    }
+    .srch input {
+      width: 100%;
+      padding: 8px 12px 8px 30px;
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      color: var(--text);
-      transition: border-color 0.2s, box-shadow 0.2s;
+      border-radius: var(--radius-s);
+      font-family: var(--font-sans); font-size: 13.5px;
+      color: var(--text); transition: border-color 0.2s;
     }
-
-    .search-box input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .clear-search {
-      position: absolute;
-      right: 8px;
-      background: none;
-      border: none;
-      font-size: 17px;
-      color: var(--text-muted);
-      cursor: pointer;
-      line-height: 1;
-      padding: 2px 4px;
-      transition: color 0.15s;
-    }
-
-    .clear-search:hover { color: var(--text); }
-
-    .active-tag-filter {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px 4px 12px;
-      background: var(--accent-light);
-      border: 1px solid var(--accent);
+    .srch input:focus { outline: none; border-color: var(--border-f); }
+    .lib-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+    .flt-btn {
+      padding: 5px 12px;
       border-radius: 20px;
-      font-size: 12px;
-      color: var(--accent-dim);
-      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-family: var(--font-sans); font-size: 12px;
+      font-weight: 500; color: var(--muted);
+      cursor: pointer; transition: all 0.15s;
     }
+    .flt-btn:hover { border-color: var(--mid); color: var(--mid); }
+    .flt-btn.on { background: var(--text); border-color: var(--text); color: white; }
+    .lib-meta { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-    .active-tag-filter button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      line-height: 1;
-      color: var(--accent-dim);
-      padding: 0 2px;
-      opacity: 0.7;
-      transition: opacity 0.15s;
-    }
-
-    .active-tag-filter button:hover { opacity: 1; }
-
-    .list-meta {
-      margin-left: auto;
-      font-size: 12px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    /* Word list scroll */
-    .word-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 28px;
+    .lib-grid {
+      padding: 28px 48px 64px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 14px;
       align-content: start;
     }
 
-    .word-list::-webkit-scrollbar { width: 5px; }
-    .word-list::-webkit-scrollbar-track { background: transparent; }
-    .word-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    /* ═══════════════════════════════════════════
-       Word Card
-    ═══════════════════════════════════════════ */
-    .word-card {
+    /* Word card */
+    .wcard {
       background: var(--card);
-      border: 1px solid var(--border-light);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 18px 20px;
-      box-shadow: var(--shadow);
-      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
-      position: relative;
+      transition: box-shadow 0.2s;
     }
-
-    .word-card:hover {
-      box-shadow: var(--shadow-md);
-      border-color: var(--border);
-      transform: translateY(-1px);
-    }
-
-    .word-card.editing {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-md);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .card-word-block {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .card-word {
+    .wcard:hover { box-shadow: var(--sh); }
+    .wc-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .wc-wb { flex: 1; min-width: 0; }
+    .wc-word {
       font-family: var(--font-serif);
-      font-size: 21px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.2;
-      word-break: break-word;
+      font-size: 22px; font-weight: 600;
+      color: var(--text); line-height: 1.2;
     }
-
-    .card-phonetic {
-      font-family: var(--font-sans);
-      font-size: 12px;
-      color: var(--phonetic);
-      background: var(--phonetic-bg);
-      padding: 2px 7px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-top: 5px;
-      letter-spacing: 0.03em;
+    .wc-ph {
+      font-size: 12px; color: var(--green);
+      margin-top: 3px; font-family: var(--font-sans);
     }
-
-    .card-actions {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-      opacity: 0;
-      transition: opacity 0.2s;
+    .wc-acts { display: flex; gap: 3px; opacity: 0; transition: opacity 0.2s; flex-shrink: 0; }
+    .wcard:hover .wc-acts { opacity: 1; }
+    .wca {
+      width: 28px; height: 28px;
+      border: 1px solid transparent; border-radius: 5px;
+      background: transparent; cursor: pointer;
+      font-size: 13px; display: flex;
+      align-items: center; justify-content: center;
+      color: var(--muted); transition: all 0.15s;
     }
-
-    .word-card:hover .card-actions,
-    .word-card.editing .card-actions {
-      opacity: 1;
+    .wca:hover { background: var(--bg); border-color: var(--border); color: var(--text); }
+    .wca.del:hover { background: #FEE2E2; border-color: #FCA5A5; color: var(--red); }
+    .wc-en { font-size: 12.5px; color: var(--muted); font-style: italic; line-height: 1.5; margin-bottom: 5px; }
+    .wc-cn { font-size: 13.5px; color: var(--mid); line-height: 1.5; }
+    .wc-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+    .wc-cat {
+      font-size: 11px; font-weight: 500;
+      padding: 2px 8px; background: var(--bg);
+      border-radius: 20px; color: var(--mid);
     }
-
-    .card-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-xs);
-      border: 1px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-      color: var(--text-muted);
+    .wc-date { font-size: 11px; color: var(--muted); }
+    .wc-xp { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .wc-xp.open { max-height: 300px; }
+    .wc-xp-btn {
+      width: 100%; text-align: center;
+      background: none; border: none;
+      padding: 5px 0 0; font-size: 11px;
+      color: var(--muted); cursor: pointer; transition: color 0.15s;
     }
-
-    .card-btn:hover { background: var(--bg-deep); border-color: var(--border); color: var(--text); }
-    .card-btn.delete:hover { background: var(--danger-light); border-color: #FCA5A5; color: var(--danger); }
-
-    .card-definition {
-      font-size: 13.5px;
-      color: var(--text-mid);
-      line-height: 1.55;
-      margin-bottom: 10px;
-    }
-
-    .card-expandable {
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      max-height: 0;
-    }
-
-    .card-expandable.open {
-      max-height: 400px;
-    }
-
-    .card-example {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      font-style: italic;
-      padding: 8px 12px;
+    .wc-xp-btn:hover { color: var(--text); }
+    .wc-ex {
+      font-size: 12px; color: var(--muted);
+      font-style: italic; padding: 8px 10px;
       background: var(--bg);
-      border-left: 3px solid var(--accent-light);
-      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
-      margin-bottom: 8px;
+      border-left: 2px solid var(--border);
+      border-radius: 0 4px 4px 0;
+      margin: 10px 0 5px; line-height: 1.6;
+    }
+    .wc-notes { font-size: 12px; color: var(--muted); }
+
+    /* Empty state */
+    .empty { grid-column: 1/-1; text-align: center; padding: 80px 32px; color: var(--muted); }
+    .empty-ico { font-size: 36px; margin-bottom: 14px; }
+    .empty p { font-size: 14px; line-height: 1.7; }
+
+    /* ════════════════════════════════
+       REVIEW PAGE
+    ════════════════════════════════ */
+    .rev-pg {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 44px 48px 72px;
     }
 
-    .card-example strong {
-      font-style: normal;
-      color: var(--text-mid);
-      font-weight: 600;
+    /* Start screen */
+    .rev-start { text-align: center; padding: 28px 0; }
+    .rev-start h2 { font-family: var(--font-serif); font-size: 30px; font-weight: 600; margin-bottom: 8px; }
+    .rev-start p { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+    .rev-cat-filter { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-bottom: 30px; }
+    .btn-start {
+      padding: 13px 44px;
+      background: var(--text); color: white; border: none;
+      border-radius: var(--radius-s);
+      font-family: var(--font-sans); font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-start:hover { opacity: 0.82; }
+
+    /* Progress bar */
+    .rev-prog { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .rev-prog-txt { font-size: 13px; color: var(--muted); white-space: nowrap; }
+    .rev-prog-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; }
+    .rev-prog-fill { height: 100%; background: var(--text); border-radius: 2px; transition: width 0.3s; }
+    .rev-end-btn {
+      background: none; border: none;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; text-decoration: underline;
     }
 
-    .card-notes {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: flex;
-      gap: 5px;
-      align-items: flex-start;
-    }
-
-    .notes-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      flex-shrink: 0;
-      padding-top: 1px;
-    }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .card-tag {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      background: var(--tag-bg);
-      border-radius: 20px;
-      color: var(--tag-text);
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: all 0.15s;
-    }
-
-    .card-tag:hover {
-      background: var(--accent-light);
-      color: var(--accent-dim);
-    }
-
-    .card-date {
-      font-size: 10px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .card-expand-btn {
-      display: block;
-      width: 100%;
+    /* Flashcard */
+    .fc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 52px 44px;
       text-align: center;
-      background: none;
-      border: none;
-      padding: 6px 0 2px;
-      cursor: pointer;
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-      transition: color 0.15s;
+      min-height: 280px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      cursor: pointer; user-select: none;
+      transition: box-shadow 0.2s;
+    }
+    .fc:hover { box-shadow: var(--sh-md); }
+    .fc-cat-tag { font-size: 12px; background: var(--bg); padding: 3px 10px; border-radius: 20px; color: var(--muted); }
+    .fc-word { font-family: var(--font-serif); font-size: 46px; font-weight: 600; color: var(--text); line-height: 1.1; }
+    .fc-tap { font-size: 12px; color: var(--muted); }
+    .fc-back { display: none; }
+    .fc-back.on { display: contents; }
+    .fc-ph { font-size: 17px; color: var(--green); }
+    .fc-en { font-size: 14px; color: var(--muted); font-style: italic; max-width: 460px; line-height: 1.55; }
+    .fc-cn { font-size: 20px; color: var(--text); font-weight: 500; max-width: 460px; }
+    .fc-ex {
+      font-size: 13px; color: var(--muted);
+      font-style: italic; line-height: 1.6;
+      padding-top: 14px; margin-top: 4px;
+      border-top: 1px solid var(--border);
+      max-width: 520px;
     }
 
-    .card-expand-btn:hover { color: var(--accent); }
-
-    /* ═══════════════════════════════════════════
-       Empty State
-    ═══════════════════════════════════════════ */
-    .empty-state {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 64px 32px;
-      color: var(--text-muted);
+    /* Review buttons */
+    .rev-btns { display: flex; gap: 14px; margin-top: 20px; justify-content: center; }
+    .rev-btn {
+      flex: 1; max-width: 180px;
+      padding: 12px; background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-s);
+      font-family: var(--font-sans); font-size: 14px;
+      font-weight: 500; color: var(--mid);
+      cursor: pointer; transition: all 0.2s;
     }
+    .rev-btn.knew:hover { border-color: var(--green); color: var(--green); background: #F0FDF4; }
+    .rev-btn.again:hover { border-color: var(--red); color: var(--red); background: #FFF1F1; }
 
-    .empty-icon {
-      font-size: 48px;
+    /* Done screen */
+    .rev-done { text-align: center; padding: 60px 0; }
+    .rev-done-ico { font-size: 44px; margin-bottom: 18px; }
+    .rev-done h2 { font-family: var(--font-serif); font-size: 28px; margin-bottom: 10px; }
+    .rev-done p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ════════════════════════════════
+       STATS PAGE
+    ════════════════════════════════ */
+    .stat-pg { padding: 40px 48px 72px; max-width: 900px; }
+    .stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+    .scard { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 20px; }
+    .scard-val { font-family: var(--font-serif); font-size: 38px; font-weight: 600; color: var(--text); line-height: 1; }
+    .scard-lbl { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .stat-sec {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 26px 28px;
       margin-bottom: 16px;
-      opacity: 0.5;
     }
+    .stat-sec-title { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 18px; }
+    .cat-row { display: flex; align-items: center; gap: 12px; margin-bottom: 11px; }
+    .cat-row-lbl { font-size: 13px; color: var(--mid); width: 130px; flex-shrink: 0; }
+    .cat-row-bar-wrap { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+    .cat-row-bar { height: 100%; background: var(--text); border-radius: 3px; transition: width 0.5s ease; }
+    .cat-row-num { font-size: 13px; font-weight: 600; color: var(--text); width: 28px; text-align: right; }
 
-    .empty-state p {
-      font-size: 14px;
-      line-height: 1.6;
+    /* Storage info */
+    .storage-sec {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 26px 28px;
     }
+    .storage-title { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 14px; }
+    .storage-body { font-size: 13.5px; color: var(--mid); line-height: 1.75; }
+    .storage-body strong { color: var(--text); }
+    .storage-body ul { padding-left: 18px; margin: 6px 0; }
+    .storage-body li { margin-bottom: 4px; }
+    .storage-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
 
-    .empty-state .empty-sub {
-      font-size: 12px;
-      margin-top: 8px;
-    }
-
-    /* ═══════════════════════════════════════════
-       Delete Confirmation Modal
-    ═══════════════════════════════════════════ */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(22,18,13,0.55);
+    /* ─── Delete Modal ─── */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(22,18,13,0.5);
       backdrop-filter: blur(4px);
       z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: none; align-items: center; justify-content: center;
     }
-
-    .modal-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      width: 320px;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border);
+    .modal-bg.on { display: flex; }
+    .modal-box {
+      background: var(--card); border-radius: var(--radius);
+      padding: 32px; width: 340px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.14);
     }
-
-    .modal-card h3 {
-      font-family: var(--font-serif);
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 10px;
+    .modal-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; }
+    .modal-box p { font-size: 14px; color: var(--mid); line-height: 1.6; }
+    .modal-acts { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+    .btn-del {
+      padding: 9px 20px;
+      background: var(--red); border: none;
+      border-radius: var(--radius-s);
+      color: white; font-family: var(--font-sans);
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: opacity 0.2s;
     }
+    .btn-del:hover { opacity: 0.85; }
 
-    .modal-card p {
-      font-size: 13.5px;
-      color: var(--text-mid);
-      line-height: 1.55;
-    }
-
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 24px;
-    }
-
-    .btn-danger {
-      padding: 8px 18px;
-      background: var(--danger);
-      border: none;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 600;
-      color: white;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .btn-danger:hover { opacity: 0.85; }
-
-    /* ═══════════════════════════════════════════
-       Toast Notification
-    ═══════════════════════════════════════════ */
+    /* ─── Toast ─── */
     .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
+      position: fixed; bottom: 28px; right: 28px;
       padding: 12px 20px;
-      background: var(--text);
-      color: var(--bg);
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
+      background: var(--text); color: white;
+      border-radius: var(--radius-s);
+      font-size: 13.5px; font-weight: 500;
       z-index: 2000;
-      opacity: 0;
-      transform: translateY(8px);
+      opacity: 0; transform: translateY(8px);
       transition: opacity 0.25s, transform 0.25s;
-      pointer-events: none;
-      max-width: 320px;
+      pointer-events: none; max-width: 320px;
     }
+    .toast.on { opacity: 1; transform: translateY(0); }
+    .toast.ok  { background: #15803D; }
+    .toast.err { background: var(--red); }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .hd { padding: 14px 18px; }
+      .tabs { padding: 0 18px; overflow-x: auto; }
+      .add-pg, .rev-pg { padding: 24px 18px 60px; }
+      .f-row.cols2 { grid-template-columns: 1fr; }
+      .lib-bar { padding: 12px 18px; }
+      .lib-grid { padding: 18px 18px 60px; }
+      .stat-pg { padding: 24px 18px 60px; }
+      .stat-cards { grid-template-columns: repeat(2, 1fr); }
     }
-
-    .toast.success { background: var(--success); }
-    .toast.error   { background: var(--danger); }
-
-    /* ═══════════════════════════════════════════
-       Responsive
-    ═══════════════════════════════════════════ */
-    @media (max-width: 820px) {
-      .app-body { flex-direction: column; height: auto; overflow: visible; }
-      .sidebar  { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-      .word-list-area { height: auto; min-height: 50vh; }
-      .word-list { overflow-y: visible; }
-      .header { padding: 0 16px; }
-      .header-stats { display: none; }
-      .list-toolbar { padding: 12px 16px; }
-      .word-list { padding: 16px; }
-    }
-
     @media (max-width: 480px) {
-      .word-list { grid-template-columns: 1fr; }
-      .form-card { padding: 20px 16px; }
+      .lib-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
+<!-- ═══════════════════════════════════
      HEADER
-══════════════════════════════════════ -->
-<header class="header">
-  <div class="header-brand">
-    <h1 class="header-title">噗噗的专业词库<span class="accent-dot"> ·</span></h1>
-    <p class="header-subtitle">lernen, lernen, immer lernen</p>
+═══════════════════════════════════ -->
+<header class="hd">
+  <div>
+    <div class="hd-title">噗噗的专业词库</div>
+    <div class="hd-sub">lernen, lernen, immer lernen</div>
   </div>
-
-  <div class="header-stats">
-    <div class="stat-item">
-      <span class="stat-value" id="statTotal">0</span>
-      <span class="stat-label">总词数</span>
+  <div class="hd-right">
+    <div class="hd-stats">
+      <div class="hd-today">
+        <span id="hdToday">0</span><em>/10 today</em>
+      </div>
+      <div class="hd-week"><span id="hdWeek">0</span> this week</div>
     </div>
-    <div class="header-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value" id="statWeek">0</span>
-      <span class="stat-label">本周新增</span>
-    </div>
-    <div class="header-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value" id="statToday">0</span>
-      <span class="stat-label">今日新增</span>
-    </div>
-  </div>
-
-  <div class="header-divider"></div>
-
-  <div class="header-actions">
-    <button class="btn-ghost" onclick="exportVocab()">导出 JSON</button>
-    <label class="btn-ghost" for="importFile" style="cursor:pointer"
-           tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){document.getElementById('importFile').click()}">导入 JSON</label>
-    <input id="importFile" type="file" accept=".json" onchange="importVocab(event)" style="display:none">
+    <button class="hd-export-btn" onclick="exportVocab()" title="导出词库 JSON">&#8593;</button>
   </div>
 </header>
 
-<!-- ══════════════════════════════════════
-     APP BODY
-══════════════════════════════════════ -->
-<div class="app-body">
+<!-- ═══════════════════════════════════
+     TAB BAR
+═══════════════════════════════════ -->
+<nav class="tabs">
+  <button class="tab-btn on" data-tab="add"><span class="tab-ico">&#9670;</span> 添加单词</button>
+  <button class="tab-btn"    data-tab="lib"><span class="tab-ico">&#9672;</span> 词库</button>
+  <button class="tab-btn"    data-tab="rev"><span class="tab-ico">&#9679;</span> 复习</button>
+  <button class="tab-btn"    data-tab="stat"><span class="tab-ico">&#9632;</span> 统计</button>
+</nav>
 
-  <!-- ─────────── Left Sidebar: Form ─────────── -->
-  <aside class="sidebar">
-    <div class="form-card">
-      <h2 class="form-section-title" id="formTitle">
-        ＋ 添加新词
-      </h2>
+<!-- ═══════════════════════════════════
+     ADD PAGE
+═══════════════════════════════════ -->
+<div id="pg-add" class="pg on">
+  <div class="add-pg">
 
-      <!-- Word -->
-      <div class="form-field">
-        <label>英文单词 <span style="color:var(--danger)">*</span></label>
-        <div class="input-with-action">
-          <input id="fWord" type="text" placeholder="e.g. maritime" autocomplete="off"
-                 oninput="onWordInput()">
-          <button class="btn-fetch" id="btnAutoFetch" onclick="autoFetchPhonetic()" title="从词典自动获取音标">
-            ⚡ 音标
-          </button>
+    <!-- Edit mode banner -->
+    <div id="editBanner" class="edit-banner" style="display:none">
+      &#9998;&ensp;正在编辑：<strong id="editBannerWord"></strong>
+      <button onclick="cancelEdit()">取消编辑</button>
+    </div>
+
+    <!-- Row 1: Word + Phonetic -->
+    <div class="f-row cols2">
+      <div class="f-field">
+        <div class="f-lbl">ENGLISH WORD <span class="req">*</span></div>
+        <input id="fWord" class="f-inp" type="text"
+               placeholder="e.g. indemnification"
+               autocomplete="off" oninput="onWordChange()">
+      </div>
+      <div class="f-field">
+        <div class="f-lbl">PHONETIC / 音标 <span class="hint">&#8212; DJ 英式</span></div>
+        <div class="ph-row">
+          <input id="fPhonetic" class="f-inp" type="text"
+                 placeholder="/ɪn,demnɪfɪˈkeɪʃən/" autocomplete="off">
+          <button id="btnAuto" class="btn-auto" onclick="doAutoFetch()">Auto</button>
+        </div>
+        <div id="phoneticSt" class="f-status"></div>
+      </div>
+    </div>
+
+    <!-- Row 2: English Definition -->
+    <div class="f-row cols1">
+      <div class="f-field">
+        <div class="f-lbl">ENGLISH DEFINITION <span class="hint">&#8212; 自动获取英文释义</span></div>
+        <textarea id="fEnDef" class="f-inp" rows="2"
+          placeholder="(noun) The action of compensating for loss, injury, or damage; reimbursement."></textarea>
+        <div id="enDefSt" class="f-status"></div>
+      </div>
+    </div>
+
+    <!-- Row 3: Chinese Definition -->
+    <div class="f-row cols1">
+      <div class="f-field">
+        <div class="f-lbl">中文释义 <span class="req">*</span></div>
+        <textarea id="fDefinition" class="f-inp" rows="2"
+          placeholder="赔偿；补偿；免受损失"></textarea>
+      </div>
+    </div>
+
+    <!-- Row 4: Example -->
+    <div class="f-row cols1">
+      <div class="f-field">
+        <div class="f-lbl">例句</div>
+        <textarea id="fExample" class="f-inp" rows="2"
+          placeholder="The charter party provides for indemnification of the shipowner against cargo claims."></textarea>
+      </div>
+    </div>
+
+    <!-- Row 5: Category -->
+    <div class="f-row cols1">
+      <div class="f-field">
+        <div class="f-lbl">分类</div>
+        <div class="cat-chips" id="catChips"><!-- built by JS --></div>
+      </div>
+    </div>
+
+    <!-- Row 6: Notes -->
+    <div class="f-row cols1">
+      <div class="f-field">
+        <div class="f-lbl">备注</div>
+        <input id="fNotes" class="f-inp" type="text"
+               placeholder="e.g. 首次见于 MEPC 80 文件；相关词：indemnify">
+      </div>
+    </div>
+
+    <div class="f-actions">
+      <button id="btnCancelEdit" class="btn-sec" onclick="cancelEdit()" style="display:none">取消编辑</button>
+      <button id="btnSave" class="btn-pri" onclick="saveWord()">保存词条</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     LIBRARY PAGE
+═══════════════════════════════════ -->
+<div id="pg-lib" class="pg">
+  <div class="lib-bar">
+    <div class="srch">
+      <span class="srch-ico">&#128269;</span>
+      <input id="libSearch" type="text" placeholder="搜索单词、释义…" oninput="renderLib()">
+    </div>
+    <div class="lib-filters" id="libFilters"><!-- built by JS --></div>
+    <span class="lib-meta" id="libMeta">共 0 词</span>
+  </div>
+  <div class="lib-grid" id="libGrid"><!-- built by JS --></div>
+</div>
+
+<!-- ═══════════════════════════════════
+     REVIEW PAGE
+═══════════════════════════════════ -->
+<div id="pg-rev" class="pg">
+  <div class="rev-pg">
+
+    <!-- Start screen -->
+    <div id="revStart" class="rev-start">
+      <h2>开始复习 &#128218;</h2>
+      <p>词库共 <strong id="revTotal">0</strong> 个词条&#8201;&#183;&#8201;按分类筛选或全部复习</p>
+      <div class="rev-cat-filter" id="revCatFilter"><!-- built by JS --></div>
+      <button class="btn-start" onclick="startReview()">开始复习 &#8594;</button>
+    </div>
+
+    <!-- Flashcard area -->
+    <div id="revCards" style="display:none">
+      <div class="rev-prog">
+        <span class="rev-prog-txt" id="revProgTxt">1 / 10</span>
+        <div class="rev-prog-bar"><div class="rev-prog-fill" id="revProgFill" style="width:10%"></div></div>
+        <button class="rev-end-btn" onclick="endReview()">结束复习</button>
+      </div>
+
+      <div class="fc" id="flashcard" onclick="flipCard()">
+        <div id="fcFront">
+          <div class="fc-cat-tag" id="fcCatTag"></div>
+          <div class="fc-word" id="fcWord"></div>
+          <div class="fc-tap">&#8212; 点击翻转查看释义 &#8212;</div>
+        </div>
+        <div id="fcBack" class="fc-back">
+          <div class="fc-ph" id="fcPh"></div>
+          <div class="fc-en" id="fcEn"></div>
+          <div class="fc-cn" id="fcCn"></div>
+          <div class="fc-ex" id="fcEx"></div>
         </div>
       </div>
 
-      <!-- Phonetic -->
-      <div class="form-field">
-        <label>音标 <span class="label-hint">IPA 国际音标（⚡ 仅支持英文单词自动获取）</span></label>
-        <input id="fPhonetic" type="text" placeholder="e.g. /ˈmærɪtaɪm/" autocomplete="off">
-        <div id="phoneticStatus" class="field-hint"></div>
-      </div>
-
-      <!-- Definition -->
-      <div class="form-field">
-        <label>中文释义 <span style="color:var(--danger)">*</span></label>
-        <textarea id="fDefinition" rows="2" placeholder="e.g. 海事的；与航海相关的"></textarea>
-      </div>
-
-      <!-- Example -->
-      <div class="form-field">
-        <label>例句 <span class="label-hint">建议使用真实语境句子</span></label>
-        <textarea id="fExample" rows="3"
-          placeholder="e.g. The vessel must comply with MEPC maritime pollution regulations."></textarea>
-      </div>
-
-      <!-- Notes -->
-      <div class="form-field">
-        <label>备注 <span class="label-hint">出处、记忆技巧等</span></label>
-        <input id="fNotes" type="text" placeholder="e.g. 首次见于 MEPC 80 文件第 12 页">
-      </div>
-
-      <!-- Tags -->
-      <div class="form-field">
-        <label>标签 <span class="label-hint">点击快选或自定义输入</span></label>
-        <div id="tagSuggestions" class="tag-suggestions">
-          <button class="tag-chip" data-tag="合同/法律" onclick="toggleSuggestedTag(this)">合同/法律</button>
-          <button class="tag-chip" data-tag="航运/LNG" onclick="toggleSuggestedTag(this)">航运/LNG</button>
-          <button class="tag-chip" data-tag="通用商务" onclick="toggleSuggestedTag(this)">通用商务</button>
-          <button class="tag-chip" data-tag="技术/工程" onclick="toggleSuggestedTag(this)">技术/工程</button>
-          <button class="tag-chip" data-tag="学术" onclick="toggleSuggestedTag(this)">学术</button>
-        </div>
-        <div class="input-with-action">
-          <input id="fTagInput" type="text" placeholder="自定义标签，回车确认"
-                 onkeydown="handleTagInput(event)" autocomplete="off">
-          <button class="btn-fetch" onclick="addCustomTag()">+ 添加</button>
-        </div>
-        <div id="selectedTags" class="selected-tags"></div>
-      </div>
-
-      <!-- Actions -->
-      <div class="form-actions">
-        <button id="btnCancel" class="btn-secondary" onclick="cancelEdit()" style="display:none">取消编辑</button>
-        <button id="btnSave" class="btn-primary" onclick="saveWord()">保存词条</button>
+      <div class="rev-btns" id="revBtns" style="display:none">
+        <button class="rev-btn again" onclick="markReview(false)">&#10007; 再看一次</button>
+        <button class="rev-btn knew"  onclick="markReview(true)">&#10003; 认识了</button>
       </div>
     </div>
-  </aside>
 
-  <!-- ─────────── Main: Word List ─────────── -->
-  <main class="word-list-area">
-    <div class="list-toolbar">
-      <div class="search-box">
-        <span class="search-icon">🔎</span>
-        <input id="searchInput" type="text"
-               placeholder="搜索单词、释义…"
-               oninput="onSearchInput()">
-        <button id="clearSearch" class="clear-search" onclick="clearSearch()" style="display:none">×</button>
-      </div>
-
-      <div class="active-tag-filter" id="activeTagFilter" style="display:none">
-        <span>标签：</span>
-        <strong id="activeTagName"></strong>
-        <button onclick="clearTagFilter()" title="清除筛选">×</button>
-      </div>
-
-      <span class="list-meta" id="listMeta">共 0 个词条</span>
+    <!-- Done screen -->
+    <div id="revDone" style="display:none" class="rev-done">
+      <div class="rev-done-ico">&#127881;</div>
+      <h2>复习完成！</h2>
+      <p id="revDoneTxt"></p>
+      <button class="btn-start" style="margin-top:28px" onclick="resetReview()">再复习一遍</button>
     </div>
 
-    <div id="wordList" class="word-list">
-      <!-- cards injected by JS -->
-      <div class="empty-state" id="emptyState">
-        <div class="empty-icon">📖</div>
-        <p>词库还是空的，快从左侧表单添加第一个单词吧！</p>
-        <p class="empty-sub">每天 10 个，积少成多。</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     STATS PAGE
+═══════════════════════════════════ -->
+<div id="pg-stat" class="pg">
+  <div class="stat-pg">
+
+    <div class="stat-cards">
+      <div class="scard"><div class="scard-val" id="sTotal">0</div><div class="scard-lbl">总词数</div></div>
+      <div class="scard"><div class="scard-val" id="sToday">0</div><div class="scard-lbl">今日新增</div></div>
+      <div class="scard"><div class="scard-val" id="sWeek">0</div><div class="scard-lbl">本周新增</div></div>
+      <div class="scard"><div class="scard-val" id="sReviewed">0</div><div class="scard-lbl">已复习</div></div>
+    </div>
+
+    <div class="stat-sec">
+      <div class="stat-sec-title">分类统计</div>
+      <div id="catStatRows"><!-- built by JS --></div>
+    </div>
+
+    <div class="storage-sec">
+      <div class="storage-title">&#128190; 数据存储说明</div>
+      <div class="storage-body">
+        <p>您的词库数据存储在当前<strong>浏览器的 localStorage</strong> 中。关闭页面后数据不会丢失。</p>
+        <br>
+        <p><strong>&#128241; 跨设备同步（手机 + 电脑）</strong></p>
+        <p>localStorage 不支持自动跨设备同步。如需在多设备共用词库，操作如下：</p>
+        <ul>
+          <li>在当前设备点击「<strong>导出 JSON</strong>」保存文件</li>
+          <li>将文件通过微信、邮件或 iCloud 传送到另一台设备</li>
+          <li>在另一台设备打开词库页面，点击「<strong>导入 JSON</strong>」，数据会智能合并</li>
+        </ul>
+        <br>
+        <p><strong>&#128218; 词库容量</strong>：浏览器可用约 5 MB 空间，足以存储 <strong>5,000+ 个词条</strong>。</p>
+        <p>当前已使用：<strong id="storageUsed">计算中…</strong></p>
+        <br>
+        <p><strong>&#9888;&#65039; 注意</strong>：在浏览器设置中"清除缓存/数据"会导致词库丢失。建议每周导出一次 JSON 作为备份。</p>
+      </div>
+      <div class="storage-actions">
+        <button class="btn-pri" onclick="exportVocab()">导出 JSON 备份</button>
+        <label class="btn-sec" style="cursor:pointer;display:inline-flex;align-items:center"
+               tabindex="0"
+               onkeydown="if(event.key==='Enter'||event.key===' ')document.getElementById('importFileStat').click()">
+          导入 JSON
+          <input id="importFileStat" type="file" accept=".json" onchange="importVocab(event)" style="display:none">
+        </label>
       </div>
     </div>
-  </main>
 
-</div><!-- /.app-body -->
+  </div>
+</div>
 
-<!-- ══════════════════════════════════════
+<!-- ═══════════════════════════════════
      DELETE MODAL
-══════════════════════════════════════ -->
-<div id="deleteModal" class="modal-overlay" style="display:none">
-  <div class="modal-card">
+═══════════════════════════════════ -->
+<div id="delModal" class="modal-bg">
+  <div class="modal-box">
     <h3>确认删除</h3>
-    <p>即将删除词条 <strong id="deleteWordName"></strong>，此操作不可恢复。</p>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeDeleteModal()">取消</button>
-      <button class="btn-danger" onclick="confirmDelete()">删除</button>
+    <p>即将删除词条 <strong id="delWordName"></strong>，此操作不可撤销。</p>
+    <div class="modal-acts">
+      <button class="btn-sec" onclick="closeModal()">取消</button>
+      <button class="btn-del" onclick="confirmDelete()">删除</button>
     </div>
   </div>
 </div>
@@ -1038,36 +780,67 @@
 <!-- Toast -->
 <div id="toast" class="toast"></div>
 
-<!-- ══════════════════════════════════════
+<!-- ═══════════════════════════════════
      JAVASCRIPT
-══════════════════════════════════════ -->
+═══════════════════════════════════ -->
 <script>
-/* ─── Data Store ─── */
+'use strict';
+
+/* ─── Constants ─── */
 const STORE_KEY = 'pupu-vocab-db';
 
-function loadVocab() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
-  catch (e) { console.error('词库数据读取失败，已重置:', e); return []; }
-}
-
-function saveVocab(list) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(list));
-}
+const CATS = [
+  { id: 'law',      label: '法律·合同', emoji: '⚖️' },
+  { id: 'shipping', label: '航运·能源', emoji: '🚢' },
+  { id: 'ai',       label: 'AI·技术',   emoji: '⌨️' },
+  { id: 'academic', label: '学术',       emoji: '🎓' },
+  { id: 'business', label: '商务',       emoji: '💼' },
+  { id: 'general',  label: '通用',       emoji: '📝' },
+];
 
 /* ─── State ─── */
-let vocab       = loadVocab();
-let editingId   = null;          // null = add mode, string = edit mode
-let deleteTarget = null;
-let selectedTags = [];
-let searchQuery  = '';
-let tagFilter    = '';
+let vocab        = loadVocab();
+let editingId    = null;
+let selectedCat  = '';
+let libFilter    = '';        // category filter in library
+let libSearch    = '';        // search query
+let delTarget    = null;
+let revQueue     = [];
+let revIndex     = 0;
+let revKnew      = 0;
+let revFlipped   = false;
+let revCatFilter = '';        // category filter in review
+
+/* ─── Storage helpers ─── */
+function loadVocab() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    // Migrate: if a word has tags[] but no category, promote first tag to category
+    list.forEach(w => {
+      if (!w.category && w.tags && w.tags.length) {
+        const tagMap = { '合同/法律': 'law', '法律·合同': 'law', '航运/LNG': 'shipping', '航运·能源': 'shipping', 'AI·技术': 'ai', 'Ai·技术': 'ai', '学术': 'academic', '商务': 'business', '通用商务': 'business', '技术/工程': 'ai', '通用': 'general' };
+        const first = w.tags[0];
+        w.category = tagMap[first] || 'general';
+      }
+      if (!w.reviewCount) w.reviewCount = 0;
+    });
+    return list;
+  } catch (e) {
+    console.error('词库读取失败:', e);
+    return [];
+  }
+}
+
+function saveVocab() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(vocab));
+}
 
 /* ─── Utilities ─── */
 function uid() {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+  return (typeof crypto !== 'undefined' && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 }
 
 function fmtDate(ts) {
@@ -1075,502 +848,653 @@ function fmtDate(ts) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
+function startOfDay() { const d = new Date(); d.setHours(0,0,0,0); return d.getTime(); }
+
 function startOfWeek() {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  // Monday as first day of week (ISO standard, common in China)
+  const d = new Date(); d.setHours(0,0,0,0);
   const day = d.getDay();
   d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
   return d.getTime();
 }
 
-function startOfDay() {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  return d.getTime();
+function catLabel(id) {
+  const c = CATS.find(c => c.id === id);
+  return c ? c.emoji + ' ' + c.label : '';
 }
 
 function showToast(msg, type = '') {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.className = 'toast ' + type;
-  el.classList.add('show');
-  clearTimeout(el._timer);
-  el._timer = setTimeout(() => el.classList.remove('show'), 2800);
+  el.classList.add('on');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('on'), 2800);
 }
 
-/* ─── Stats ─── */
-function updateStats() {
-  const total = vocab.length;
-  const week  = vocab.filter(w => w.createdAt >= startOfWeek()).length;
-  const today = vocab.filter(w => w.createdAt >= startOfDay()).length;
-  document.getElementById('statTotal').textContent = total;
-  document.getElementById('statWeek').textContent  = week;
-  document.getElementById('statToday').textContent = today;
+function storageUsedKB() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY) || '';
+    return (new Blob([raw]).size / 1024).toFixed(1);
+  } catch { return '?'; }
 }
 
-/* ─── Rendering ─── */
-function getFiltered() {
-  let list = vocab.slice().reverse(); // newest first
-  if (tagFilter) {
-    list = list.filter(w => w.tags && w.tags.includes(tagFilter));
-  }
-  if (searchQuery) {
-    const q = searchQuery.toLowerCase();
-    list = list.filter(w =>
-      w.word.toLowerCase().includes(q) ||
-      (w.definition && w.definition.toLowerCase().includes(q)) ||
-      (w.example && w.example.toLowerCase().includes(q))
-    );
-  }
-  return list;
-}
-
-function renderList() {
-  const list = getFiltered();
-  const container = document.getElementById('wordList');
-  const empty     = document.getElementById('emptyState');
-  document.getElementById('listMeta').textContent = `共 ${list.length} 个词条`;
-
-  // Clear existing cards (but keep empty state element)
-  Array.from(container.children).forEach(ch => {
-    if (ch.id !== 'emptyState') ch.remove();
+/* ─── Tab switching ─── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+    document.getElementById('pg-' + tab).classList.add('on');
+    if (tab === 'lib')  renderLib();
+    if (tab === 'rev')  renderRevStart();
+    if (tab === 'stat') renderStats();
   });
+});
 
-  if (list.length === 0) {
-    empty.style.display = '';
-    const msg = searchQuery || tagFilter
-      ? '没有符合条件的词条。'
-      : '词库还是空的，快从左侧表单添加第一个单词吧！';
-    empty.querySelector('p:first-of-type').textContent = msg;
-    return;
-  }
-
-  empty.style.display = 'none';
-
-  list.forEach(word => {
-    const card = buildCard(word);
-    container.appendChild(card);
-  });
-}
-
-function buildCard(word) {
-  const div = document.createElement('div');
-  div.className = 'word-card' + (editingId === word.id ? ' editing' : '');
-  div.dataset.id = word.id;
-
-  const hasExtra = word.example || word.notes;
-
-  const editBtn   = document.createElement('button');
-  editBtn.className = 'card-btn edit';
-  editBtn.title = '编辑';
-  editBtn.textContent = '✏️';
-  editBtn.dataset.action = 'edit';
-  editBtn.dataset.id = word.id;
-
-  const deleteBtn = document.createElement('button');
-  deleteBtn.className = 'card-btn delete';
-  deleteBtn.title = '删除';
-  deleteBtn.textContent = '🗑️';
-  deleteBtn.dataset.action = 'delete';
-  deleteBtn.dataset.id = word.id;
-
-  const actionsDiv = document.createElement('div');
-  actionsDiv.className = 'card-actions';
-  actionsDiv.appendChild(editBtn);
-  actionsDiv.appendChild(deleteBtn);
-
-  const wordEl = document.createElement('div');
-  wordEl.className = 'card-word';
-  wordEl.textContent = word.word;
-
-  const wordBlock = document.createElement('div');
-  wordBlock.className = 'card-word-block';
-  wordBlock.appendChild(wordEl);
-
-  if (word.phonetic) {
-    const phoneticEl = document.createElement('div');
-    phoneticEl.className = 'card-phonetic';
-    phoneticEl.textContent = word.phonetic;
-    wordBlock.appendChild(phoneticEl);
-  }
-
-  const headerDiv = document.createElement('div');
-  headerDiv.className = 'card-header';
-  headerDiv.appendChild(wordBlock);
-  headerDiv.appendChild(actionsDiv);
-
-  const defDiv = document.createElement('div');
-  defDiv.className = 'card-definition';
-  defDiv.textContent = word.definition || '';
-
-  div.appendChild(headerDiv);
-  div.appendChild(defDiv);
-
-  if (hasExtra) {
-    const expandable = document.createElement('div');
-    expandable.className = 'card-expandable';
-    expandable.id = 'expand-' + word.id;
-
-    if (word.example) {
-      const exDiv = document.createElement('div');
-      exDiv.className = 'card-example';
-      const strong = document.createElement('strong');
-      strong.textContent = '例：';
-      exDiv.appendChild(strong);
-      exDiv.appendChild(document.createTextNode(word.example));
-      expandable.appendChild(exDiv);
-    }
-
-    if (word.notes) {
-      const notesDiv = document.createElement('div');
-      notesDiv.className = 'card-notes';
-      const labelSpan = document.createElement('span');
-      labelSpan.className = 'notes-label';
-      labelSpan.textContent = '备注';
-      const notesSpan = document.createElement('span');
-      notesSpan.textContent = word.notes;
-      notesDiv.appendChild(labelSpan);
-      notesDiv.appendChild(notesSpan);
-      expandable.appendChild(notesDiv);
-    }
-
-    const expandBtn = document.createElement('button');
-    expandBtn.className = 'card-expand-btn';
-    expandBtn.id = 'expbtn-' + word.id;
-    expandBtn.textContent = '展开详情 ▾';
-    expandBtn.dataset.action = 'expand';
-    expandBtn.dataset.id = word.id;
-
-    div.appendChild(expandable);
-    div.appendChild(expandBtn);
-  }
-
-  const footerDiv = document.createElement('div');
-  footerDiv.className = 'card-footer';
-
-  const tagsDiv = document.createElement('div');
-  tagsDiv.className = 'card-tags';
-  (word.tags || []).forEach(t => {
-    const tagEl = document.createElement('span');
-    tagEl.className = 'card-tag';
-    tagEl.textContent = t;
-    tagEl.title = '筛选此标签';
-    tagEl.dataset.action = 'filter-tag';
-    tagEl.dataset.tag = t;
-    tagsDiv.appendChild(tagEl);
-  });
-
-  const dateEl = document.createElement('span');
-  dateEl.className = 'card-date';
-  dateEl.textContent = fmtDate(word.createdAt);
-
-  footerDiv.appendChild(tagsDiv);
-  footerDiv.appendChild(dateEl);
-  div.appendChild(footerDiv);
-
-  return div;
-}
-
-function toggleExpand(id) {
-  const el  = document.getElementById('expand-' + id);
-  const btn = document.getElementById('expbtn-' + id);
-  if (!el) return;
-  const open = el.classList.toggle('open');
-  btn.textContent = open ? '收起详情 ▴' : '展开详情 ▾';
-}
-
-/* ─── Search & Filter ─── */
-function onSearchInput() {
-  const inp = document.getElementById('searchInput');
-  searchQuery = inp.value.trim();
-  document.getElementById('clearSearch').style.display = searchQuery ? '' : 'none';
-  renderList();
-}
-
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
-  searchQuery = '';
-  document.getElementById('clearSearch').style.display = 'none';
-  renderList();
-}
-
-function filterByTag(tag) {
-  tagFilter = tag;
-  document.getElementById('activeTagFilter').style.display = '';
-  document.getElementById('activeTagName').textContent = tag;
-  renderList();
-}
-
-function clearTagFilter() {
-  tagFilter = '';
-  document.getElementById('activeTagFilter').style.display = 'none';
-  renderList();
-}
-
-/* ─── Tag form helpers ─── */
-function renderSelectedTags() {
-  const el = document.getElementById('selectedTags');
+/* ─── Build category chips (Add form) ─── */
+function buildCatChips() {
+  const el = document.getElementById('catChips');
   el.innerHTML = '';
-  selectedTags.forEach(t => {
-    const span = document.createElement('span');
-    span.className = 'selected-tag';
-    span.textContent = t;
-
+  CATS.forEach(c => {
     const btn = document.createElement('button');
-    btn.className = 'remove-tag';
-    btn.title = '移除';
-    btn.textContent = '×';
-    btn.dataset.tag = t;
-    btn.dataset.action = 'remove-tag';
-
-    span.appendChild(btn);
-    el.appendChild(span);
-  });
-
-  // sync suggestion chips
-  document.querySelectorAll('#tagSuggestions .tag-chip').forEach(chip => {
-    chip.classList.toggle('active', selectedTags.includes(chip.dataset.tag));
+    btn.className = 'cat-chip' + (selectedCat === c.id ? ' on' : '');
+    btn.type = 'button';
+    btn.textContent = c.emoji + ' ' + c.label;
+    btn.dataset.cat = c.id;
+    btn.addEventListener('click', () => {
+      selectedCat = selectedCat === c.id ? '' : c.id;
+      buildCatChips();
+    });
+    el.appendChild(btn);
   });
 }
 
-function toggleSuggestedTag(btn) {
-  const tag = btn.dataset.tag;
-  if (selectedTags.includes(tag)) {
-    selectedTags = selectedTags.filter(t => t !== tag);
-  } else {
-    selectedTags.push(tag);
-  }
-  renderSelectedTags();
+/* ─── Auto-fetch: phonetics + English definition ─── */
+let fetchCtrl = null;
+
+function setSt(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = 'f-status' + (type ? ' ' + type : '');
+  el.textContent = msg;
 }
 
-function addCustomTag() {
-  const inp = document.getElementById('fTagInput');
-  const val = inp.value.trim();
-  if (val && !selectedTags.includes(val)) {
-    selectedTags.push(val);
-    renderSelectedTags();
-  }
-  inp.value = '';
-}
+async function doAutoFetch() {
+  const word = document.getElementById('fWord').value.trim().toLowerCase();
+  if (!word) { showToast('请先输入英文单词', 'err'); return; }
 
-function handleTagInput(e) {
-  if (e.key === 'Enter') { e.preventDefault(); addCustomTag(); }
-}
+  const btn = document.getElementById('btnAuto');
+  btn.classList.add('spin');
+  btn.textContent = '…';
+  setSt('phoneticSt', '', '查询中…');
+  setSt('enDefSt', '', '查询中…');
 
-function removeTag(tag) {
-  selectedTags = selectedTags.filter(t => t !== tag);
-  renderSelectedTags();
-}
-
-/* ─── Auto-fetch Phonetics ─── */
-let fetchController = null;
-
-async function autoFetchPhonetic() {
-  const word = document.getElementById('fWord').value.trim();
-  if (!word) { showToast('请先输入英文单词', 'error'); return; }
-
-  const btn    = document.getElementById('btnAutoFetch');
-  const status = document.getElementById('phoneticStatus');
-  btn.classList.add('loading');
-  btn.textContent = '获取中…';
-  status.className = 'field-hint loading';
-  status.textContent = '正在查询词典…';
-
-  if (fetchController) fetchController.abort();
-  fetchController = new AbortController();
+  if (fetchCtrl) fetchCtrl.abort();
+  fetchCtrl = new AbortController();
+  const sig = fetchCtrl.signal;
 
   try {
-    const resp = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
-      { signal: fetchController.signal }
-    );
+    const result = await lookupWord(word, sig);
 
-    if (!resp.ok) {
-      if (resp.status === 404) throw new Error('not found');
-      if (resp.status === 429) throw new Error('rate limited');
-      throw new Error('server error');
-    }
-    const data = await resp.json();
-    const entry = data[0];
-
-    // Try to get phonetics from phonetics array or root phonetic field
-    let phonetic = '';
-    if (entry.phonetics && entry.phonetics.length) {
-      const p = entry.phonetics.find(x => x.text && x.text.trim());
-      if (p) phonetic = p.text;
-    }
-    if (!phonetic && entry.phonetic) phonetic = entry.phonetic;
-
-    if (phonetic) {
-      document.getElementById('fPhonetic').value = phonetic;
-      status.className = 'field-hint success';
-      status.textContent = '✓ 音标已自动填入';
+    if (result.phonetic) {
+      document.getElementById('fPhonetic').value = result.phonetic;
+      setSt('phoneticSt', 'ok', '✓ ' + result.phoneticNote);
     } else {
-      status.className = 'field-hint error';
-      status.textContent = '未找到音标，请手动输入';
+      setSt('phoneticSt', 'err', '未找到音标，请手动输入');
     }
-  } catch (err) {
-    if (err.name === 'AbortError') return;
-    const isNetworkErr = err instanceof TypeError;
-    const isRateLimited = err.message === 'rate limited';
-    status.className = 'field-hint error';
-    status.textContent = isNetworkErr
-      ? '网络连接失败，请手动输入音标'
-      : isRateLimited
-        ? '请求过于频繁，请稍后再试'
-        : '未找到该词条，请手动输入音标';
+
+    if (result.enDef) {
+      document.getElementById('fEnDef').value = result.enDef;
+      setSt('enDefSt', 'ok', '✓ ' + result.enDefNote);
+    } else {
+      setSt('enDefSt', 'err', '未找到英文释义，请手动输入');
+    }
+  } catch (e) {
+    if (e.name !== 'AbortError') {
+      setSt('phoneticSt', 'err', '网络错误，请稍后重试');
+      setSt('enDefSt', 'err', '网络错误，请稍后重试');
+    }
   } finally {
-    btn.classList.remove('loading');
-    btn.textContent = '⚡ 音标';
-    fetchController = null;
+    btn.classList.remove('spin');
+    btn.textContent = 'Auto';
+    fetchCtrl = null;
   }
 }
 
-function onWordInput() {
-  // clear phonetic status when word changes
-  const status = document.getElementById('phoneticStatus');
-  if (status.textContent) {
-    status.className = 'field-hint';
-    status.textContent = '';
+async function lookupWord(word, sig) {
+  const res = { phonetic: '', phoneticNote: '', enDef: '', enDefNote: '' };
+
+  /* ── Step 1: Free Dictionary API (prefers British IPA) ── */
+  try {
+    const r = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
+      { signal: sig }
+    );
+    if (r.ok) {
+      const data = await r.json();
+      const entry = data[0];
+
+      /* Phonetic: prefer entry with en-gb/uk audio URL */
+      if (entry.phonetics && entry.phonetics.length) {
+        const ukP = entry.phonetics.find(p =>
+          p.text && p.audio && (
+            p.audio.includes('en-gb') || p.audio.includes('-uk') ||
+            p.audio.includes('en-uk') || p.audio.includes('_gb')
+          )
+        );
+        if (ukP && ukP.text) { res.phonetic = ukP.text; res.phoneticNote = 'DJ 英式'; }
+        if (!res.phonetic) {
+          const anyP = entry.phonetics.find(p => p.text && p.text.trim());
+          if (anyP) { res.phonetic = anyP.text; res.phoneticNote = 'IPA'; }
+        }
+      }
+      if (!res.phonetic && entry.phonetic) { res.phonetic = entry.phonetic; res.phoneticNote = 'IPA'; }
+
+      /* English definition */
+      if (entry.meanings && entry.meanings.length) {
+        const parts = [];
+        entry.meanings.slice(0, 3).forEach(m => {
+          const d = m.definitions && m.definitions[0] && m.definitions[0].definition;
+          if (d) parts.push('(' + m.partOfSpeech + ') ' + d);
+        });
+        if (parts.length) { res.enDef = parts.join('\n'); res.enDefNote = 'Free Dictionary'; }
+      }
+    }
+  } catch (e) {
+    if (e.name === 'AbortError') throw e;
+  }
+
+  /* ── Step 2: Wiktionary fallback (for specialized/legal/maritime terms) ── */
+  if (!res.phonetic || !res.enDef) {
+    try {
+      await lookupWiktionary(word, sig, res);
+    } catch (e) {
+      if (e.name === 'AbortError') throw e;
+    }
+  }
+
+  return res;
+}
+
+async function lookupWiktionary(word, sig, res) {
+  /* MediaWiki API: raw wikitext for phonetic parsing */
+  if (!res.phonetic) {
+    const r = await fetch(
+      `https://en.wiktionary.org/w/api.php?action=query&titles=${encodeURIComponent(word)}&prop=revisions&rvprop=content&format=json&origin=*`,
+      { signal: sig }
+    );
+    if (r.ok) {
+      const data = await r.json();
+      const pages = data.query && data.query.pages;
+      const page  = pages ? Object.values(pages)[0] : null;
+      const content = (page && page.revisions && page.revisions[0] &&
+                       (page.revisions[0]['*'] || page.revisions[0].content)) || '';
+      if (content) {
+        /* Look for UK pronunciation first: {{a|UK}} ... {{IPA|en|/.../ */
+        let m = content.match(/\{\{a\|(?:UK|RP|British)[^}]*\}\}[^{]*\{\{IPA\|en\|([/\[][^|}\n]+)/i);
+        if (!m) {
+          /* Fall back to any {{IPA|en|/.../ */
+          m = content.match(/\{\{IPA\|en[^|]*\|([/\[][^|}\n]+)/);
+        }
+        if (m) {
+          const raw = m[1].trim();
+          const clean = raw.match(/^[/\[].+?[/\]]/);
+          if (clean) { res.phonetic = clean[0]; res.phoneticNote = 'DJ 英式 (Wiktionary)'; }
+          else if (raw.startsWith('/') || raw.startsWith('[')) {
+            res.phonetic = raw.split('|')[0].trim();
+            res.phoneticNote = 'IPA (Wiktionary)';
+          }
+        }
+      }
+    }
+  }
+
+  /* Wiktionary REST API for English definitions */
+  if (!res.enDef) {
+    const r2 = await fetch(
+      `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`,
+      { signal: sig }
+    );
+    if (r2.ok) {
+      const data = await r2.json();
+      const enEntries = data.en;
+      if (enEntries && enEntries.length) {
+        const parts = [];
+        enEntries.slice(0, 3).forEach(e => {
+          const d = e.definitions && e.definitions[0] && e.definitions[0].definition;
+          if (d) {
+            const clean = d.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+            if (clean) parts.push('(' + e.partOfSpeech + ') ' + clean);
+          }
+        });
+        if (parts.length) { res.enDef = parts.join('\n'); res.enDefNote = 'Wiktionary'; }
+      }
+    }
   }
 }
 
-/* ─── CRUD ─── */
+function onWordChange() {
+  setSt('phoneticSt', '', '');
+  setSt('enDefSt', '', '');
+}
+
+/* ─── Save / Edit word ─── */
 function saveWord() {
   const word = document.getElementById('fWord').value.trim();
   const def  = document.getElementById('fDefinition').value.trim();
+  if (!word) { showToast('请填写英文单词', 'err'); document.getElementById('fWord').focus(); return; }
+  if (!def)  { showToast('请填写中文释义', 'err'); document.getElementById('fDefinition').focus(); return; }
 
-  if (!word) { showToast('请填写英文单词', 'error'); document.getElementById('fWord').focus(); return; }
-  if (!def)  { showToast('请填写中文释义', 'error'); document.getElementById('fDefinition').focus(); return; }
-
-  const phonetic = document.getElementById('fPhonetic').value.trim();
-  const example  = document.getElementById('fExample').value.trim();
-  const notes    = document.getElementById('fNotes').value.trim();
+  const entry = {
+    word,
+    phonetic:   document.getElementById('fPhonetic').value.trim(),
+    enDef:      document.getElementById('fEnDef').value.trim(),
+    definition: def,
+    example:    document.getElementById('fExample').value.trim(),
+    notes:      document.getElementById('fNotes').value.trim(),
+    category:   selectedCat,
+    updatedAt:  Date.now(),
+  };
 
   if (editingId) {
-    // Update existing
-    const idx = vocab.findIndex(w => w.id === editingId);
+    const idx = vocab.findIndex(v => v.id === editingId);
     if (idx >= 0) {
-      vocab[idx] = {
-        ...vocab[idx],
-        word, phonetic, definition: def, example, notes,
-        tags: [...selectedTags],
-        updatedAt: Date.now()
-      };
-      showToast(`"${word}" 已更新`, 'success');
+      vocab[idx] = { ...vocab[idx], ...entry };
+      showToast(`"${word}" 已更新`, 'ok');
     }
     cancelEdit();
   } else {
-    // Add new
-    vocab.push({
-      id: uid(),
-      word, phonetic, definition: def, example, notes,
-      tags: [...selectedTags],
-      createdAt: Date.now(),
-      updatedAt: Date.now()
-    });
-    showToast(`"${word}" 已添加！`, 'success');
+    vocab.push({ id: uid(), ...entry, createdAt: Date.now(), reviewCount: 0 });
+    showToast(`"${word}" 已添加！`, 'ok');
     clearForm();
   }
-
-  saveVocab(vocab);
-  updateStats();
-  renderList();
+  saveVocab();
+  updateHeader();
 }
 
 function startEdit(id) {
   const w = vocab.find(v => v.id === id);
   if (!w) return;
-
   editingId = id;
-
   document.getElementById('fWord').value       = w.word       || '';
   document.getElementById('fPhonetic').value   = w.phonetic   || '';
+  document.getElementById('fEnDef').value      = w.enDef      || '';
   document.getElementById('fDefinition').value = w.definition || '';
   document.getElementById('fExample').value    = w.example    || '';
   document.getElementById('fNotes').value      = w.notes      || '';
-  document.getElementById('phoneticStatus').textContent = '';
-  document.getElementById('phoneticStatus').className   = 'field-hint';
-
-  selectedTags = [...(w.tags || [])];
-  renderSelectedTags();
-
-  // Update form title using safe DOM manipulation
-  const titleEl = document.getElementById('formTitle');
-  titleEl.textContent = '✏️ 编辑词条 ';
-  const badge = document.createElement('span');
-  badge.className = 'edit-badge';
-  badge.textContent = w.word;
-  titleEl.appendChild(badge);
-  document.getElementById('btnCancel').style.display = '';
+  setSt('phoneticSt', '', '');
+  setSt('enDefSt', '', '');
+  selectedCat = w.category || '';
+  buildCatChips();
+  document.getElementById('editBanner').style.display = 'flex';
+  document.getElementById('editBannerWord').textContent = w.word;
+  document.getElementById('btnCancelEdit').style.display = '';
   document.getElementById('btnSave').textContent = '保存修改';
-
-  // Highlight editing card & scroll form into view
-  renderList();
-  document.querySelector('.sidebar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Switch to add tab
+  document.querySelector('[data-tab="add"]').click();
+  document.querySelector('.add-pg').scrollIntoView({ behavior: 'smooth', block: 'start' });
   document.getElementById('fWord').focus();
 }
 
 function cancelEdit() {
   editingId = null;
   clearForm();
-  document.getElementById('formTitle').textContent = '＋ 添加新词';
-  document.getElementById('btnCancel').style.display = 'none';
+  document.getElementById('editBanner').style.display = 'none';
+  document.getElementById('btnCancelEdit').style.display = 'none';
   document.getElementById('btnSave').textContent = '保存词条';
-  renderList();
 }
 
 function clearForm() {
-  ['fWord','fPhonetic','fDefinition','fExample','fNotes','fTagInput'].forEach(id => {
+  ['fWord','fPhonetic','fEnDef','fDefinition','fExample','fNotes'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  selectedTags = [];
-  renderSelectedTags();
-  const status = document.getElementById('phoneticStatus');
-  status.textContent = '';
-  status.className = 'field-hint';
+  setSt('phoneticSt', '', '');
+  setSt('enDefSt', '', '');
+  selectedCat = '';
+  buildCatChips();
 }
 
-/* ─── Delete ─── */
-function openDeleteModal(id) {
+/* ─── Header stats ─── */
+function updateHeader() {
+  const today = vocab.filter(w => w.createdAt >= startOfDay()).length;
+  const week  = vocab.filter(w => w.createdAt >= startOfWeek()).length;
+  document.getElementById('hdToday').textContent = today;
+  document.getElementById('hdWeek').textContent  = week;
+}
+
+/* ─── Library rendering ─── */
+function renderLib() {
+  libSearch = document.getElementById('libSearch').value.trim().toLowerCase();
+  buildLibFilters();
+
+  let list = vocab.slice().reverse();
+  if (libFilter) list = list.filter(w => w.category === libFilter);
+  if (libSearch) {
+    list = list.filter(w =>
+      w.word.toLowerCase().includes(libSearch) ||
+      (w.definition && w.definition.toLowerCase().includes(libSearch)) ||
+      (w.enDef && w.enDef.toLowerCase().includes(libSearch))
+    );
+  }
+
+  const grid = document.getElementById('libGrid');
+  grid.innerHTML = '';
+  document.getElementById('libMeta').textContent = '共 ' + list.length + ' 词';
+
+  if (list.length === 0) {
+    const e = document.createElement('div');
+    e.className = 'empty';
+    const ico = document.createElement('div'); ico.className = 'empty-ico'; ico.textContent = '📖';
+    const p = document.createElement('p');
+    p.textContent = libSearch || libFilter
+      ? '没有符合条件的词条'
+      : '词库还是空的，快去"添加单词"吧！';
+    e.appendChild(ico); e.appendChild(p);
+    grid.appendChild(e);
+    return;
+  }
+
+  list.forEach(w => grid.appendChild(buildCard(w)));
+}
+
+function buildLibFilters() {
+  const el = document.getElementById('libFilters');
+  el.innerHTML = '';
+  // "All" button
+  const all = document.createElement('button');
+  all.className = 'flt-btn' + (libFilter === '' ? ' on' : '');
+  all.textContent = '全部';
+  all.addEventListener('click', () => { libFilter = ''; renderLib(); });
+  el.appendChild(all);
+
+  CATS.forEach(c => {
+    const count = vocab.filter(w => w.category === c.id).length;
+    if (count === 0) return;
+    const btn = document.createElement('button');
+    btn.className = 'flt-btn' + (libFilter === c.id ? ' on' : '');
+    btn.textContent = c.emoji + ' ' + c.label + ' ' + count;
+    btn.addEventListener('click', () => { libFilter = c.id; renderLib(); });
+    el.appendChild(btn);
+  });
+}
+
+function buildCard(w) {
+  const div = document.createElement('div');
+  div.className = 'wcard';
+
+  /* Head: word block + actions */
+  const head = document.createElement('div'); head.className = 'wc-head';
+
+  const wb = document.createElement('div'); wb.className = 'wc-wb';
+  const wordEl = document.createElement('div'); wordEl.className = 'wc-word'; wordEl.textContent = w.word;
+  wb.appendChild(wordEl);
+  if (w.phonetic) {
+    const ph = document.createElement('div'); ph.className = 'wc-ph'; ph.textContent = w.phonetic;
+    wb.appendChild(ph);
+  }
+
+  const acts = document.createElement('div'); acts.className = 'wc-acts';
+  const editBtn = document.createElement('button');
+  editBtn.className = 'wca'; editBtn.title = '编辑'; editBtn.textContent = '✏️';
+  editBtn.dataset.action = 'edit'; editBtn.dataset.id = w.id;
+  const delBtn = document.createElement('button');
+  delBtn.className = 'wca del'; delBtn.title = '删除'; delBtn.textContent = '🗑️';
+  delBtn.dataset.action = 'delete'; delBtn.dataset.id = w.id;
+  acts.appendChild(editBtn); acts.appendChild(delBtn);
+
+  head.appendChild(wb); head.appendChild(acts);
+  div.appendChild(head);
+
+  /* English definition */
+  if (w.enDef) {
+    const en = document.createElement('div'); en.className = 'wc-en';
+    en.textContent = w.enDef.split('\n')[0]; // first line only in card view
+    div.appendChild(en);
+  }
+
+  /* Chinese definition */
+  if (w.definition) {
+    const cn = document.createElement('div'); cn.className = 'wc-cn'; cn.textContent = w.definition;
+    div.appendChild(cn);
+  }
+
+  /* Expandable: example + notes */
+  const hasExtra = w.example || w.notes;
+  if (hasExtra) {
+    const xp = document.createElement('div'); xp.className = 'wc-xp'; xp.id = 'xp-' + w.id;
+    if (w.example) {
+      const ex = document.createElement('div'); ex.className = 'wc-ex'; ex.textContent = w.example;
+      xp.appendChild(ex);
+    }
+    if (w.notes) {
+      const nt = document.createElement('div'); nt.className = 'wc-notes'; nt.textContent = '📝 ' + w.notes;
+      xp.appendChild(nt);
+    }
+    const xpBtn = document.createElement('button');
+    xpBtn.className = 'wc-xp-btn'; xpBtn.id = 'xpb-' + w.id;
+    xpBtn.textContent = '展开详情 ▾';
+    xpBtn.dataset.action = 'expand'; xpBtn.dataset.id = w.id;
+    div.appendChild(xp); div.appendChild(xpBtn);
+  }
+
+  /* Footer: category + date */
+  const foot = document.createElement('div'); foot.className = 'wc-foot';
+  const cat = document.createElement('span'); cat.className = 'wc-cat';
+  cat.textContent = w.category ? catLabel(w.category) : '未分类';
+  const date = document.createElement('span'); date.className = 'wc-date';
+  date.textContent = fmtDate(w.createdAt);
+  foot.appendChild(cat); foot.appendChild(date);
+  div.appendChild(foot);
+
+  return div;
+}
+
+/* Event delegation on library grid */
+document.getElementById('libGrid').addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const { action, id } = btn.dataset;
+  if (action === 'edit')   startEdit(id);
+  if (action === 'delete') openDelModal(id);
+  if (action === 'expand') toggleExpand(id);
+});
+
+function toggleExpand(id) {
+  const xp  = document.getElementById('xp-' + id);
+  const btn = document.getElementById('xpb-' + id);
+  if (!xp) return;
+  const open = xp.classList.toggle('open');
+  btn.textContent = open ? '收起详情 ▴' : '展开详情 ▾';
+}
+
+/* ─── Delete modal ─── */
+function openDelModal(id) {
   const w = vocab.find(v => v.id === id);
   if (!w) return;
-  deleteTarget = id;
-  document.getElementById('deleteWordName').textContent = '"' + w.word + '"';
-  document.getElementById('deleteModal').style.display = 'flex';
+  delTarget = id;
+  document.getElementById('delWordName').textContent = '"' + w.word + '"';
+  document.getElementById('delModal').classList.add('on');
 }
 
-function closeDeleteModal() {
-  deleteTarget = null;
-  document.getElementById('deleteModal').style.display = 'none';
+function closeModal() {
+  delTarget = null;
+  document.getElementById('delModal').classList.remove('on');
 }
 
 function confirmDelete() {
-  if (!deleteTarget) return;
-  const w = vocab.find(v => v.id === deleteTarget);
-  vocab = vocab.filter(v => v.id !== deleteTarget);
-  saveVocab(vocab);
-  if (editingId === deleteTarget) cancelEdit();
-  deleteTarget = null;
-  closeDeleteModal();
-  showToast(w ? `"${w.word}" 已删除` : '词条已删除');
-  updateStats();
-  renderList();
+  if (!delTarget) return;
+  const w = vocab.find(v => v.id === delTarget);
+  vocab = vocab.filter(v => v.id !== delTarget);
+  saveVocab();
+  if (editingId === delTarget) cancelEdit();
+  delTarget = null;
+  closeModal();
+  showToast(w ? '"' + w.word + '" 已删除' : '词条已删除');
+  updateHeader();
+  renderLib();
+}
+
+/* Close modal on backdrop click */
+document.getElementById('delModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('delModal')) closeModal();
+});
+
+/* ─── Review system ─── */
+function renderRevStart() {
+  document.getElementById('revTotal').textContent = vocab.length;
+  buildRevCatFilter();
+  document.getElementById('revStart').style.display = '';
+  document.getElementById('revCards').style.display = 'none';
+  document.getElementById('revDone').style.display  = 'none';
+}
+
+function buildRevCatFilter() {
+  const el = document.getElementById('revCatFilter');
+  el.innerHTML = '';
+  const all = document.createElement('button');
+  all.className = 'cat-chip' + (revCatFilter === '' ? ' on' : '');
+  all.textContent = '全部';
+  all.addEventListener('click', () => { revCatFilter = ''; buildRevCatFilter(); });
+  el.appendChild(all);
+  CATS.forEach(c => {
+    const count = vocab.filter(w => w.category === c.id).length;
+    if (count === 0) return;
+    const btn = document.createElement('button');
+    btn.className = 'cat-chip' + (revCatFilter === c.id ? ' on' : '');
+    btn.textContent = c.emoji + ' ' + c.label;
+    btn.addEventListener('click', () => { revCatFilter = c.id; buildRevCatFilter(); });
+    el.appendChild(btn);
+  });
+}
+
+function startReview() {
+  let pool = vocab.filter(w => w.definition); // must have CN def
+  if (revCatFilter) pool = pool.filter(w => w.category === revCatFilter);
+  if (pool.length === 0) { showToast('没有可复习的词条', 'err'); return; }
+  // Shuffle
+  revQueue = pool.slice().sort(() => Math.random() - 0.5);
+  revIndex = 0;
+  revKnew  = 0;
+  document.getElementById('revStart').style.display = 'none';
+  document.getElementById('revCards').style.display = '';
+  document.getElementById('revDone').style.display  = 'none';
+  showFlashcard();
+}
+
+function showFlashcard() {
+  if (revIndex >= revQueue.length) { finishReview(); return; }
+  const w = revQueue[revIndex];
+  revFlipped = false;
+
+  /* Progress */
+  const pct = Math.round((revIndex / revQueue.length) * 100);
+  document.getElementById('revProgTxt').textContent = (revIndex + 1) + ' / ' + revQueue.length;
+  document.getElementById('revProgFill').style.width = Math.max(pct, 3) + '%';
+
+  /* Card front */
+  document.getElementById('fcCatTag').textContent = w.category ? catLabel(w.category) : '';
+  document.getElementById('fcWord').textContent   = w.word;
+
+  /* Card back */
+  document.getElementById('fcPh').textContent  = w.phonetic || '';
+  document.getElementById('fcEn').textContent  = w.enDef    ? w.enDef.split('\n')[0] : '';
+  document.getElementById('fcCn').textContent  = w.definition;
+  document.getElementById('fcEx').textContent  = w.example  || '';
+  document.getElementById('fcEx').style.display = w.example ? '' : 'none';
+
+  document.getElementById('fcBack').classList.remove('on');
+  document.getElementById('revBtns').style.display = 'none';
+}
+
+function flipCard() {
+  if (revFlipped) return;
+  revFlipped = true;
+  document.getElementById('fcBack').classList.add('on');
+  document.getElementById('revBtns').style.display = 'flex';
+}
+
+function markReview(knew) {
+  const w = revQueue[revIndex];
+  if (knew) {
+    revKnew++;
+    // increment reviewCount
+    const orig = vocab.find(v => v.id === w.id);
+    if (orig) { orig.reviewCount = (orig.reviewCount || 0) + 1; orig.reviewedAt = Date.now(); }
+  }
+  revIndex++;
+  if (revIndex >= revQueue.length) {
+    saveVocab();
+    finishReview();
+  } else {
+    showFlashcard();
+  }
+}
+
+function finishReview() {
+  saveVocab();
+  document.getElementById('revCards').style.display = 'none';
+  document.getElementById('revDone').style.display  = '';
+  const total = revQueue.length;
+  document.getElementById('revDoneTxt').textContent =
+    `复习了 ${total} 个词条，认识 ${revKnew} 个，需再练习 ${total - revKnew} 个。`;
+}
+
+function endReview() {
+  document.getElementById('revCards').style.display = 'none';
+  renderRevStart();
+}
+
+function resetReview() {
+  renderRevStart();
+}
+
+/* ─── Stats rendering ─── */
+function renderStats() {
+  const total    = vocab.length;
+  const today    = vocab.filter(w => w.createdAt >= startOfDay()).length;
+  const week     = vocab.filter(w => w.createdAt >= startOfWeek()).length;
+  const reviewed = vocab.filter(w => w.reviewCount > 0).length;
+
+  document.getElementById('sTotal').textContent    = total;
+  document.getElementById('sToday').textContent    = today;
+  document.getElementById('sWeek').textContent     = week;
+  document.getElementById('sReviewed').textContent = reviewed;
+
+  /* Category breakdown */
+  const rows = document.getElementById('catStatRows');
+  rows.innerHTML = '';
+  const max = Math.max(1, ...CATS.map(c => vocab.filter(w => w.category === c.id).length));
+  CATS.forEach(c => {
+    const count = vocab.filter(w => w.category === c.id).length;
+    const row = document.createElement('div'); row.className = 'cat-row';
+    const lbl = document.createElement('div'); lbl.className = 'cat-row-lbl';
+    lbl.textContent = c.emoji + ' ' + c.label;
+    const bw = document.createElement('div'); bw.className = 'cat-row-bar-wrap';
+    const b  = document.createElement('div'); b.className  = 'cat-row-bar';
+    b.style.width = (count / max * 100) + '%';
+    bw.appendChild(b);
+    const num = document.createElement('div'); num.className = 'cat-row-num';
+    num.textContent = count;
+    row.appendChild(lbl); row.appendChild(bw); row.appendChild(num);
+    rows.appendChild(row);
+  });
+
+  /* Storage usage */
+  document.getElementById('storageUsed').textContent = storageUsedKB() + ' KB（约 5,120 KB 可用）';
 }
 
 /* ─── Export / Import ─── */
 function exportVocab() {
-  if (vocab.length === 0) { showToast('词库为空，无法导出', 'error'); return; }
+  if (vocab.length === 0) { showToast('词库为空，无法导出', 'err'); return; }
   const blob = new Blob([JSON.stringify(vocab, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = `pupu-vocab-${new Date().toISOString().slice(0,10)}.json`;
+  a.download = 'pupu-vocab-' + new Date().toISOString().slice(0,10) + '.json';
   a.click();
   URL.revokeObjectURL(url);
-  showToast(`已导出 ${vocab.length} 个词条`, 'success');
+  showToast('已导出 ' + vocab.length + ' 个词条', 'ok');
 }
 
 function importVocab(e) {
@@ -1584,62 +1508,28 @@ function importVocab(e) {
       let added = 0;
       data.forEach(item => {
         if (!item.word || !item.id) return;
-        if (!vocab.find(v => v.id === item.id)) {
-          vocab.push(item);
-          added++;
-        }
+        if (!vocab.find(v => v.id === item.id)) { vocab.push(item); added++; }
       });
-      saveVocab(vocab);
-      updateStats();
-      renderList();
-      showToast(`已导入 ${added} 个新词条`, 'success');
-    } catch {
-      showToast('导入失败：文件格式不正确', 'error');
-    }
+      saveVocab();
+      updateHeader();
+      showToast('已导入 ' + added + ' 个新词条', 'ok');
+    } catch { showToast('导入失败：文件格式不正确', 'err'); }
   };
   reader.readAsText(file);
-  e.target.value = ''; // reset so same file can be re-imported
+  e.target.value = '';
 }
 
-/* ─── Close modal on overlay click ─── */
-document.getElementById('deleteModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
-});
-
-/* ─── Event delegation: word list (edit / delete / expand / tag-filter) ─── */
-document.getElementById('wordList').addEventListener('click', e => {
-  const btn = e.target.closest('[data-action]');
-  if (!btn) return;
-  const action = btn.dataset.action;
-  const id     = btn.dataset.id;
-  const tag    = btn.dataset.tag;
-  if (action === 'edit')       startEdit(id);
-  else if (action === 'delete') openDeleteModal(id);
-  else if (action === 'expand') toggleExpand(id);
-  else if (action === 'filter-tag') filterByTag(tag);
-});
-
-/* ─── Event delegation: selected tags remove buttons ─── */
-document.getElementById('selectedTags').addEventListener('click', e => {
-  const btn = e.target.closest('[data-action="remove-tag"]');
-  if (btn) removeTag(btn.dataset.tag);
-});
-
-/* ─── Keyboard shortcut ─── */
+/* ─── Keyboard shortcuts ─── */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (document.getElementById('deleteModal').style.display !== 'none') {
-      closeDeleteModal();
-    } else if (editingId) {
-      cancelEdit();
-    }
+    if (document.getElementById('delModal').classList.contains('on')) closeModal();
+    else if (editingId) cancelEdit();
   }
 });
 
 /* ─── Init ─── */
-renderSelectedTags();
-updateStats();
-renderList();
+buildCatChips();
+updateHeader();
 </script>
 
 </body>
