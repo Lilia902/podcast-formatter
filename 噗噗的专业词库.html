@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>噗噗的专业词库</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       CSS Variables – Premium Warm Palette
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg:           #F4F0E8;
+      --bg-deep:      #EAE5DA;
+      --card:         #FFFFFF;
+      --card-hover:   #FDFCF9;
+      --header-bg:    #16120D;
+      --header-text:  #F4F0E8;
+      --accent:       #B8860B;
+      --accent-dim:   #8A6508;
+      --accent-light: #F5E8C0;
+      --accent-glow:  rgba(184,134,11,0.15);
+      --text:         #1C1814;
+      --text-mid:     #5C5346;
+      --text-muted:   #9A8E80;
+      --border:       #DDD6C8;
+      --border-light: #EDE8DE;
+      --input-bg:     #FAFAF6;
+      --phonetic:     #3A7A55;
+      --phonetic-bg:  #EBF5EF;
+      --tag-bg:       #EDE8DE;
+      --tag-text:     #4A4035;
+      --tag-active-bg: #B8860B;
+      --tag-active-text: #FFF8E8;
+      --danger:       #B91C1C;
+      --danger-light: #FEE2E2;
+      --success:      #15803D;
+      --radius:       14px;
+      --radius-sm:    8px;
+      --radius-xs:    5px;
+      --shadow:       0 2px 16px rgba(22,18,13,0.07);
+      --shadow-md:    0 4px 24px rgba(22,18,13,0.10);
+      --shadow-lg:    0 12px 48px rgba(22,18,13,0.14);
+      --font-serif:   'EB Garamond', 'Georgia', serif;
+      --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    }
+
+    /* ═══════════════════════════════════════════
+       Reset & Base
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 15px; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════════
+       Header
+    ═══════════════════════════════════════════ */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0 32px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.3);
+    }
+
+    .header-brand {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .header-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #F4F0E8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-title .accent-dot {
+      color: var(--accent);
+    }
+
+    .header-subtitle {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 12px;
+      color: #907E6A;
+      letter-spacing: 0.03em;
+      margin-top: 1px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 10px;
+      color: #706050;
+      margin-top: 2px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 32px;
+      background: #302820;
+      flex-shrink: 0;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-ghost {
+      padding: 6px 14px;
+      border: 1px solid #3A3020;
+      border-radius: var(--radius-xs);
+      background: transparent;
+      color: #C0A878;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(184,134,11,0.08);
+    }
+
+    /* ═══════════════════════════════════════════
+       App Body Layout
+    ═══════════════════════════════════════════ */
+    .app-body {
+      display: flex;
+      height: calc(100vh - 72px);
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════
+       Left Sidebar (Form)
+    ═══════════════════════════════════════════ */
+    .sidebar {
+      width: 360px;
+      min-width: 320px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .form-card {
+      padding: 28px 24px;
+    }
+
+    .form-section-title {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 22px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-section-title .edit-badge {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent-dim);
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .form-field {
+      margin-bottom: 16px;
+    }
+
+    .form-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .label-hint {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-transform: none;
+      letter-spacing: 0;
+      margin-left: 4px;
+    }
+
+    .form-field input[type="text"],
+    .form-field textarea {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: vertical;
+      min-height: unset;
+    }
+
+    .form-field input[type="text"]:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-field textarea {
+      line-height: 1.55;
+    }
+
+    .input-with-action {
+      display: flex;
+      gap: 6px;
+    }
+
+    .input-with-action input {
+      flex: 1;
+    }
+
+    .btn-fetch {
+      padding: 0 10px;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-mid);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-fetch:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-dim);
+    }
+
+    .btn-fetch.loading {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      min-height: 16px;
+      transition: color 0.2s;
+    }
+
+    .field-hint.success { color: var(--success); }
+    .field-hint.error   { color: var(--danger);  }
+    .field-hint.loading { color: var(--accent);  }
+
+    /* Tag suggestions */
+    .tag-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .tag-chip {
+      padding: 4px 10px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--tag-text);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tag-chip:hover,
+    .tag-chip.active {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-dim);
+    }
+
+    .selected-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+      min-height: 26px;
+    }
+
+    .selected-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px 3px 10px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent-dim);
+    }
+
+    .selected-tag .remove-tag {
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      opacity: 0.6;
+      background: none;
+      border: none;
+      color: inherit;
+      padding: 0;
+      transition: opacity 0.15s;
+    }
+
+    .selected-tag .remove-tag:hover { opacity: 1; }
+
+    /* Form actions */
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: 10px 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFF8E8;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      padding: 10px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--text-mid);
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════════════════
+       Main Word List Area
+    ═══════════════════════════════════════════ */
+    .word-list-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .list-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 28px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      font-size: 14px;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 32px 8px 34px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 8px;
+      background: none;
+      border: none;
+      font-size: 17px;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 4px;
+      transition: color 0.15s;
+    }
+
+    .clear-search:hover { color: var(--text); }
+
+    .active-tag-filter {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px 4px 12px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--accent-dim);
+      font-weight: 500;
+    }
+
+    .active-tag-filter button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1;
+      color: var(--accent-dim);
+      padding: 0 2px;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .active-tag-filter button:hover { opacity: 1; }
+
+    .list-meta {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Word list scroll */
+    .word-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      align-content: start;
+    }
+
+    .word-list::-webkit-scrollbar { width: 5px; }
+    .word-list::-webkit-scrollbar-track { background: transparent; }
+    .word-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ═══════════════════════════════════════════
+       Word Card
+    ═══════════════════════════════════════════ */
+    .word-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    .word-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--border);
+      transform: translateY(-1px);
+    }
+
+    .word-card.editing {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-md);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .card-word-block {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-word {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .card-phonetic {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--phonetic);
+      background: var(--phonetic-bg);
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 5px;
+      letter-spacing: 0.03em;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .word-card:hover .card-actions,
+    .word-card.editing .card-actions {
+      opacity: 1;
+    }
+
+    .card-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-xs);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      color: var(--text-muted);
+    }
+
+    .card-btn:hover { background: var(--bg-deep); border-color: var(--border); color: var(--text); }
+    .card-btn.delete:hover { background: var(--danger-light); border-color: #FCA5A5; color: var(--danger); }
+
+    .card-definition {
+      font-size: 13.5px;
+      color: var(--text-mid);
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+
+    .card-expandable {
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      max-height: 0;
+    }
+
+    .card-expandable.open {
+      max-height: 400px;
+    }
+
+    .card-example {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-style: italic;
+      padding: 8px 12px;
+      background: var(--bg);
+      border-left: 3px solid var(--accent-light);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      margin-bottom: 8px;
+    }
+
+    .card-example strong {
+      font-style: normal;
+      color: var(--text-mid);
+      font-weight: 600;
+    }
+
+    .card-notes {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 5px;
+      align-items: flex-start;
+    }
+
+    .notes-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      background: var(--tag-bg);
+      border-radius: 20px;
+      color: var(--tag-text);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: all 0.15s;
+    }
+
+    .card-tag:hover {
+      background: var(--accent-light);
+      color: var(--accent-dim);
+    }
+
+    .card-date {
+      font-size: 10px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .card-expand-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: none;
+      border: none;
+      padding: 6px 0 2px;
+      cursor: pointer;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color 0.15s;
+    }
+
+    .card-expand-btn:hover { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════
+       Empty State
+    ═══════════════════════════════════════════ */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 64px 32px;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .empty-state .empty-sub {
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    /* ═══════════════════════════════════════════
+       Delete Confirmation Modal
+    ═══════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(22,18,13,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      width: 320px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+
+    .modal-card h3 {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .modal-card p {
+      font-size: 13.5px;
+      color: var(--text-mid);
+      line-height: 1.55;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .btn-danger {
+      padding: 8px 18px;
+      background: var(--danger);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-danger:hover { opacity: 0.85; }
+
+    /* ═══════════════════════════════════════════
+       Toast Notification
+    ═══════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      padding: 12px 20px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      max-width: 320px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success { background: var(--success); }
+    .toast.error   { background: var(--danger); }
+
+    /* ═══════════════════════════════════════════
+       Responsive
+    ═══════════════════════════════════════════ */
+    @media (max-width: 820px) {
+      .app-body { flex-direction: column; height: auto; overflow: visible; }
+      .sidebar  { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .word-list-area { height: auto; min-height: 50vh; }
+      .word-list { overflow-y: visible; }
+      .header { padding: 0 16px; }
+      .header-stats { display: none; }
+      .list-toolbar { padding: 12px 16px; }
+      .word-list { padding: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .word-list { grid-template-columns: 1fr; }
+      .form-card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HEADER
+══════════════════════════════════════ -->
+<header class="header">
+  <div class="header-brand">
+    <h1 class="header-title">噗噗的专业词库<span class="accent-dot"> ·</span></h1>
+    <p class="header-subtitle">lernen, lernen, immer lernen</p>
+  </div>
+
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="stat-value" id="statTotal">0</span>
+      <span class="stat-label">总词数</span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value" id="statWeek">0</span>
+      <span class="stat-label">本周新增</span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value" id="statToday">0</span>
+      <span class="stat-label">今日新增</span>
+    </div>
+  </div>
+
+  <div class="header-divider"></div>
+
+  <div class="header-actions">
+    <button class="btn-ghost" onclick="exportVocab()">导出 JSON</button>
+    <label class="btn-ghost" for="importFile" style="cursor:pointer">导入 JSON</label>
+    <input id="importFile" type="file" accept=".json" onchange="importVocab(event)" style="display:none">
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════
+     APP BODY
+══════════════════════════════════════ -->
+<div class="app-body">
+
+  <!-- ─────────── Left Sidebar: Form ─────────── -->
+  <aside class="sidebar">
+    <div class="form-card">
+      <h2 class="form-section-title" id="formTitle">
+        ＋ 添加新词
+      </h2>
+
+      <!-- Word -->
+      <div class="form-field">
+        <label>英文单词 <span style="color:var(--danger)">*</span></label>
+        <div class="input-with-action">
+          <input id="fWord" type="text" placeholder="e.g. maritime" autocomplete="off"
+                 oninput="onWordInput()">
+          <button class="btn-fetch" id="btnAutoFetch" onclick="autoFetchPhonetic()" title="从词典自动获取音标">
+            ⚡ 音标
+          </button>
+        </div>
+      </div>
+
+      <!-- Phonetic -->
+      <div class="form-field">
+        <label>音标 <span class="label-hint">IPA 国际音标（可自动获取）</span></label>
+        <input id="fPhonetic" type="text" placeholder="e.g. /ˈmærɪtaɪm/" autocomplete="off">
+        <div id="phoneticStatus" class="field-hint"></div>
+      </div>
+
+      <!-- Definition -->
+      <div class="form-field">
+        <label>中文释义 <span style="color:var(--danger)">*</span></label>
+        <textarea id="fDefinition" rows="2" placeholder="e.g. 海事的；与航海相关的"></textarea>
+      </div>
+
+      <!-- Example -->
+      <div class="form-field">
+        <label>例句 <span class="label-hint">建议使用真实语境句子</span></label>
+        <textarea id="fExample" rows="3"
+          placeholder="e.g. The vessel must comply with MEPC maritime pollution regulations."></textarea>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-field">
+        <label>备注 <span class="label-hint">出处、记忆技巧等</span></label>
+        <input id="fNotes" type="text" placeholder="e.g. 首次见于 MEPC 80 文件第 12 页">
+      </div>
+
+      <!-- Tags -->
+      <div class="form-field">
+        <label>标签 <span class="label-hint">点击快选或自定义输入</span></label>
+        <div id="tagSuggestions" class="tag-suggestions">
+          <button class="tag-chip" data-tag="合同/法律" onclick="toggleSuggestedTag(this)">合同/法律</button>
+          <button class="tag-chip" data-tag="航运/LNG" onclick="toggleSuggestedTag(this)">航运/LNG</button>
+          <button class="tag-chip" data-tag="通用商务" onclick="toggleSuggestedTag(this)">通用商务</button>
+          <button class="tag-chip" data-tag="技术/工程" onclick="toggleSuggestedTag(this)">技术/工程</button>
+          <button class="tag-chip" data-tag="学术" onclick="toggleSuggestedTag(this)">学术</button>
+        </div>
+        <div class="input-with-action">
+          <input id="fTagInput" type="text" placeholder="自定义标签，回车确认"
+                 onkeydown="handleTagInput(event)" autocomplete="off">
+          <button class="btn-fetch" onclick="addCustomTag()">+ 添加</button>
+        </div>
+        <div id="selectedTags" class="selected-tags"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button id="btnCancel" class="btn-secondary" onclick="cancelEdit()" style="display:none">取消编辑</button>
+        <button id="btnSave" class="btn-primary" onclick="saveWord()">保存词条</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─────────── Main: Word List ─────────── -->
+  <main class="word-list-area">
+    <div class="list-toolbar">
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input id="searchInput" type="text"
+               placeholder="搜索单词、释义…"
+               oninput="onSearchInput()">
+        <button id="clearSearch" class="clear-search" onclick="clearSearch()" style="display:none">×</button>
+      </div>
+
+      <div class="active-tag-filter" id="activeTagFilter" style="display:none">
+        <span>标签：</span>
+        <strong id="activeTagName"></strong>
+        <button onclick="clearTagFilter()" title="清除筛选">×</button>
+      </div>
+
+      <span class="list-meta" id="listMeta">共 0 个词条</span>
+    </div>
+
+    <div id="wordList" class="word-list">
+      <!-- cards injected by JS -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📖</div>
+        <p>词库还是空的，快从左侧表单添加第一个单词吧！</p>
+        <p class="empty-sub">每天 10 个，积少成多。</p>
+      </div>
+    </div>
+  </main>
+
+</div><!-- /.app-body -->
+
+<!-- ══════════════════════════════════════
+     DELETE MODAL
+══════════════════════════════════════ -->
+<div id="deleteModal" class="modal-overlay" style="display:none">
+  <div class="modal-card">
+    <h3>确认删除</h3>
+    <p>即将删除词条 <strong id="deleteWordName"></strong>，此操作不可恢复。</p>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeDeleteModal()">取消</button>
+      <button class="btn-danger" onclick="confirmDelete()">删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ─── Data Store ─── */
+const STORE_KEY = 'pupu-vocab-db';
+
+function loadVocab() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch { return []; }
+}
+
+function saveVocab(list) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(list));
+}
+
+/* ─── State ─── */
+let vocab       = loadVocab();
+let editingId   = null;          // null = add mode, string = edit mode
+let deleteTarget = null;
+let selectedTags = [];
+let searchQuery  = '';
+let tagFilter    = '';
+
+/* ─── Utilities ─── */
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function fmtDate(ts) {
+  const d = new Date(ts);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function startOfWeek() {
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  d.setDate(d.getDate() - d.getDay());
+  return d.getTime();
+}
+
+function startOfDay() {
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  return d.getTime();
+}
+
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type;
+  el.classList.add('show');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/* ─── Stats ─── */
+function updateStats() {
+  const total = vocab.length;
+  const week  = vocab.filter(w => w.createdAt >= startOfWeek()).length;
+  const today = vocab.filter(w => w.createdAt >= startOfDay()).length;
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statWeek').textContent  = week;
+  document.getElementById('statToday').textContent = today;
+}
+
+/* ─── Rendering ─── */
+function getFiltered() {
+  let list = vocab.slice().reverse(); // newest first
+  if (tagFilter) {
+    list = list.filter(w => w.tags && w.tags.includes(tagFilter));
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(w =>
+      w.word.toLowerCase().includes(q) ||
+      (w.definition && w.definition.toLowerCase().includes(q)) ||
+      (w.example && w.example.toLowerCase().includes(q))
+    );
+  }
+  return list;
+}
+
+function renderList() {
+  const list = getFiltered();
+  const container = document.getElementById('wordList');
+  const empty     = document.getElementById('emptyState');
+  document.getElementById('listMeta').textContent = `共 ${list.length} 个词条`;
+
+  // Clear existing cards (but keep empty state element)
+  Array.from(container.children).forEach(ch => {
+    if (ch.id !== 'emptyState') ch.remove();
+  });
+
+  if (list.length === 0) {
+    empty.style.display = '';
+    const msg = searchQuery || tagFilter
+      ? '没有符合条件的词条。'
+      : '词库还是空的，快从左侧表单添加第一个单词吧！';
+    empty.querySelector('p:first-of-type').textContent = msg;
+    return;
+  }
+
+  empty.style.display = 'none';
+
+  list.forEach(word => {
+    const card = buildCard(word);
+    container.appendChild(card);
+  });
+}
+
+function buildCard(word) {
+  const div = document.createElement('div');
+  div.className = 'word-card' + (editingId === word.id ? ' editing' : '');
+  div.dataset.id = word.id;
+
+  const hasExtra = word.example || word.notes;
+
+  div.innerHTML = `
+    <div class="card-header">
+      <div class="card-word-block">
+        <div class="card-word">${escHtml(word.word)}</div>
+        ${word.phonetic ? `<div class="card-phonetic">${escHtml(word.phonetic)}</div>` : ''}
+      </div>
+      <div class="card-actions">
+        <button class="card-btn edit"   onclick="startEdit('${word.id}')" title="编辑">✏️</button>
+        <button class="card-btn delete" onclick="openDeleteModal('${word.id}')" title="删除">🗑️</button>
+      </div>
+    </div>
+    <div class="card-definition">${escHtml(word.definition || '')}</div>
+    ${hasExtra ? `
+    <div class="card-expandable" id="expand-${word.id}">
+      ${word.example ? `<div class="card-example"><strong>例：</strong>${escHtml(word.example)}</div>` : ''}
+      ${word.notes   ? `<div class="card-notes"><span class="notes-label">备注</span><span>${escHtml(word.notes)}</span></div>` : ''}
+    </div>
+    <button class="card-expand-btn" id="expbtn-${word.id}" onclick="toggleExpand('${word.id}')">
+      展开详情 ▾
+    </button>` : ''}
+    <div class="card-footer">
+      <div class="card-tags">
+        ${(word.tags || []).map(t =>
+          `<span class="card-tag" onclick="filterByTag('${escHtml(t)}')" title="筛选此标签">${escHtml(t)}</span>`
+        ).join('')}
+      </div>
+      <span class="card-date">${fmtDate(word.createdAt)}</span>
+    </div>
+  `;
+  return div;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function toggleExpand(id) {
+  const el  = document.getElementById('expand-' + id);
+  const btn = document.getElementById('expbtn-' + id);
+  if (!el) return;
+  const open = el.classList.toggle('open');
+  btn.innerHTML = open ? '收起详情 ▴' : '展开详情 ▾';
+}
+
+/* ─── Search & Filter ─── */
+function onSearchInput() {
+  const inp = document.getElementById('searchInput');
+  searchQuery = inp.value.trim();
+  document.getElementById('clearSearch').style.display = searchQuery ? '' : 'none';
+  renderList();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  searchQuery = '';
+  document.getElementById('clearSearch').style.display = 'none';
+  renderList();
+}
+
+function filterByTag(tag) {
+  tagFilter = tag;
+  document.getElementById('activeTagFilter').style.display = '';
+  document.getElementById('activeTagName').textContent = tag;
+  renderList();
+}
+
+function clearTagFilter() {
+  tagFilter = '';
+  document.getElementById('activeTagFilter').style.display = 'none';
+  renderList();
+}
+
+/* ─── Tag form helpers ─── */
+function renderSelectedTags() {
+  const el = document.getElementById('selectedTags');
+  el.innerHTML = selectedTags.map(t => `
+    <span class="selected-tag">
+      ${escHtml(t)}
+      <button class="remove-tag" onclick="removeTag('${escHtml(t)}')" title="移除">×</button>
+    </span>
+  `).join('');
+
+  // sync suggestion chips
+  document.querySelectorAll('#tagSuggestions .tag-chip').forEach(chip => {
+    chip.classList.toggle('active', selectedTags.includes(chip.dataset.tag));
+  });
+}
+
+function toggleSuggestedTag(btn) {
+  const tag = btn.dataset.tag;
+  if (selectedTags.includes(tag)) {
+    selectedTags = selectedTags.filter(t => t !== tag);
+  } else {
+    selectedTags.push(tag);
+  }
+  renderSelectedTags();
+}
+
+function addCustomTag() {
+  const inp = document.getElementById('fTagInput');
+  const val = inp.value.trim();
+  if (val && !selectedTags.includes(val)) {
+    selectedTags.push(val);
+    renderSelectedTags();
+  }
+  inp.value = '';
+}
+
+function handleTagInput(e) {
+  if (e.key === 'Enter') { e.preventDefault(); addCustomTag(); }
+}
+
+function removeTag(tag) {
+  selectedTags = selectedTags.filter(t => t !== tag);
+  renderSelectedTags();
+}
+
+/* ─── Auto-fetch Phonetics ─── */
+let fetchController = null;
+
+async function autoFetchPhonetic() {
+  const word = document.getElementById('fWord').value.trim();
+  if (!word) { showToast('请先输入英文单词', 'error'); return; }
+
+  const btn    = document.getElementById('btnAutoFetch');
+  const status = document.getElementById('phoneticStatus');
+  btn.classList.add('loading');
+  btn.textContent = '获取中…';
+  status.className = 'field-hint loading';
+  status.textContent = '正在查询词典…';
+
+  if (fetchController) fetchController.abort();
+  fetchController = new AbortController();
+
+  try {
+    const resp = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`,
+      { signal: fetchController.signal }
+    );
+
+    if (!resp.ok) throw new Error('not found');
+    const data = await resp.json();
+    const entry = data[0];
+
+    // Try to get phonetics from phonetics array or root phonetic field
+    let phonetic = '';
+    if (entry.phonetics && entry.phonetics.length) {
+      const p = entry.phonetics.find(x => x.text && x.text.trim());
+      if (p) phonetic = p.text;
+    }
+    if (!phonetic && entry.phonetic) phonetic = entry.phonetic;
+
+    if (phonetic) {
+      document.getElementById('fPhonetic').value = phonetic;
+      status.className = 'field-hint success';
+      status.textContent = '✓ 音标已自动填入';
+    } else {
+      status.className = 'field-hint error';
+      status.textContent = '未找到音标，请手动输入';
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') return;
+    status.className = 'field-hint error';
+    status.textContent = '查询失败，请手动输入音标';
+  } finally {
+    btn.classList.remove('loading');
+    btn.textContent = '⚡ 音标';
+    fetchController = null;
+  }
+}
+
+function onWordInput() {
+  // clear phonetic status when word changes
+  const status = document.getElementById('phoneticStatus');
+  if (status.textContent) {
+    status.className = 'field-hint';
+    status.textContent = '';
+  }
+}
+
+/* ─── CRUD ─── */
+function saveWord() {
+  const word = document.getElementById('fWord').value.trim();
+  const def  = document.getElementById('fDefinition').value.trim();
+
+  if (!word) { showToast('请填写英文单词', 'error'); document.getElementById('fWord').focus(); return; }
+  if (!def)  { showToast('请填写中文释义', 'error'); document.getElementById('fDefinition').focus(); return; }
+
+  const phonetic = document.getElementById('fPhonetic').value.trim();
+  const example  = document.getElementById('fExample').value.trim();
+  const notes    = document.getElementById('fNotes').value.trim();
+
+  if (editingId) {
+    // Update existing
+    const idx = vocab.findIndex(w => w.id === editingId);
+    if (idx >= 0) {
+      vocab[idx] = {
+        ...vocab[idx],
+        word, phonetic, definition: def, example, notes,
+        tags: [...selectedTags],
+        updatedAt: Date.now()
+      };
+      showToast(`"${word}" 已更新`, 'success');
+    }
+    cancelEdit();
+  } else {
+    // Add new
+    vocab.push({
+      id: uid(),
+      word, phonetic, definition: def, example, notes,
+      tags: [...selectedTags],
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+    showToast(`"${word}" 已添加！`, 'success');
+    clearForm();
+  }
+
+  saveVocab(vocab);
+  updateStats();
+  renderList();
+}
+
+function startEdit(id) {
+  const w = vocab.find(v => v.id === id);
+  if (!w) return;
+
+  editingId = id;
+
+  document.getElementById('fWord').value       = w.word       || '';
+  document.getElementById('fPhonetic').value   = w.phonetic   || '';
+  document.getElementById('fDefinition').value = w.definition || '';
+  document.getElementById('fExample').value    = w.example    || '';
+  document.getElementById('fNotes').value      = w.notes      || '';
+  document.getElementById('phoneticStatus').textContent = '';
+  document.getElementById('phoneticStatus').className   = 'field-hint';
+
+  selectedTags = [...(w.tags || [])];
+  renderSelectedTags();
+
+  // Update form title
+  document.getElementById('formTitle').innerHTML =
+    `✏️ 编辑词条 <span class="edit-badge">${escHtml(w.word)}</span>`;
+  document.getElementById('btnCancel').style.display = '';
+  document.getElementById('btnSave').textContent = '保存修改';
+
+  // Highlight editing card & scroll form into view
+  renderList();
+  document.querySelector('.sidebar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('fWord').focus();
+}
+
+function cancelEdit() {
+  editingId = null;
+  clearForm();
+  document.getElementById('formTitle').textContent = '＋ 添加新词';
+  document.getElementById('btnCancel').style.display = 'none';
+  document.getElementById('btnSave').textContent = '保存词条';
+  renderList();
+}
+
+function clearForm() {
+  ['fWord','fPhonetic','fDefinition','fExample','fNotes','fTagInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  selectedTags = [];
+  renderSelectedTags();
+  const status = document.getElementById('phoneticStatus');
+  status.textContent = '';
+  status.className = 'field-hint';
+}
+
+/* ─── Delete ─── */
+function openDeleteModal(id) {
+  const w = vocab.find(v => v.id === id);
+  if (!w) return;
+  deleteTarget = id;
+  document.getElementById('deleteWordName').textContent = '"' + w.word + '"';
+  document.getElementById('deleteModal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+  deleteTarget = null;
+  document.getElementById('deleteModal').style.display = 'none';
+}
+
+function confirmDelete() {
+  if (!deleteTarget) return;
+  const w = vocab.find(v => v.id === deleteTarget);
+  vocab = vocab.filter(v => v.id !== deleteTarget);
+  saveVocab(vocab);
+  if (editingId === deleteTarget) cancelEdit();
+  deleteTarget = null;
+  closeDeleteModal();
+  showToast(w ? `"${w.word}" 已删除` : '词条已删除');
+  updateStats();
+  renderList();
+}
+
+/* ─── Export / Import ─── */
+function exportVocab() {
+  if (vocab.length === 0) { showToast('词库为空，无法导出', 'error'); return; }
+  const blob = new Blob([JSON.stringify(vocab, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `pupu-vocab-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`已导出 ${vocab.length} 个词条`, 'success');
+}
+
+function importVocab(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error('格式错误');
+      let added = 0;
+      data.forEach(item => {
+        if (!item.word || !item.id) return;
+        if (!vocab.find(v => v.id === item.id)) {
+          vocab.push(item);
+          added++;
+        }
+      });
+      saveVocab(vocab);
+      updateStats();
+      renderList();
+      showToast(`已导入 ${added} 个新词条`, 'success');
+    } catch {
+      showToast('导入失败：文件格式不正确', 'error');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = ''; // reset so same file can be re-imported
+}
+
+/* ─── Close modal on overlay click ─── */
+document.getElementById('deleteModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
+});
+
+/* ─── Keyboard shortcut ─── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('deleteModal').style.display !== 'none') {
+      closeDeleteModal();
+    } else if (editingId) {
+      cancelEdit();
+    }
+  }
+});
+
+/* ─── Init ─── */
+renderSelectedTags();
+updateStats();
+renderList();
+</script>
+
+</body>
+</html>
