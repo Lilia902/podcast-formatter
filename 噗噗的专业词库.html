@@ -789,6 +789,33 @@
 /* ─── Constants ─── */
 const STORE_KEY = 'pupu-vocab-db';
 
+// Approximate localStorage quota (5 MB is the typical browser default).
+// Used as a display hint only; actual limit varies by browser.
+const LOCALSTORAGE_QUOTA_KB = 5120;
+
+// Maps legacy tag strings (v1 free-form tags) to the new category IDs.
+// This migration map is intentionally exhaustive to cover all tag variants
+// that may exist in users' persisted data from the previous version.
+const LEGACY_TAG_MAP = {
+  '合同/法律':  'law',
+  '法律·合同':  'law',
+  '航运/LNG':   'shipping',
+  '航运·能源':  'shipping',
+  'AI·技术':    'ai',
+  'Ai·技术':    'ai',
+  '技术/工程':  'ai',
+  '学术':       'academic',
+  '商务':       'business',
+  '通用商务':   'business',
+  '通用':       'general',
+};
+
+// Wiktionary wikitext regex patterns for extracting IPA pronunciation.
+// Pattern A: UK-accented pronunciation block: {{a|UK}} ... {{IPA|en|/pronunciation/
+// Pattern B: Any IPA block: {{IPA|en|/pronunciation/
+const WIKI_IPA_UK  = /\{\{a\|(?:UK|RP|British)[^}]*\}\}[^{]*\{\{IPA\|en\|([/\[][^|}\n]+)/i;
+const WIKI_IPA_ANY = /\{\{IPA\|en[^|]*\|([/\[][^|}\n]+)/;
+
 const CATS = [
   { id: 'law',      label: '法律·合同', emoji: '⚖️' },
   { id: 'shipping', label: '航运·能源', emoji: '🚢' },
@@ -819,9 +846,7 @@ function loadVocab() {
     // Migrate: if a word has tags[] but no category, promote first tag to category
     list.forEach(w => {
       if (!w.category && w.tags && w.tags.length) {
-        const tagMap = { '合同/法律': 'law', '法律·合同': 'law', '航运/LNG': 'shipping', '航运·能源': 'shipping', 'AI·技术': 'ai', 'Ai·技术': 'ai', '学术': 'academic', '商务': 'business', '通用商务': 'business', '技术/工程': 'ai', '通用': 'general' };
-        const first = w.tags[0];
-        w.category = tagMap[first] || 'general';
+        w.category = LEGACY_TAG_MAP[w.tags[0]] || 'general';
       }
       if (!w.reviewCount) w.reviewCount = 0;
     });
@@ -837,10 +862,12 @@ function saveVocab() {
 }
 
 /* ─── Utilities ─── */
+// Monotonic counter ensures uniqueness even when crypto.randomUUID is unavailable
+// and multiple entries are created within the same millisecond.
+let _uidSeq = 0;
 function uid() {
-  return (typeof crypto !== 'undefined' && crypto.randomUUID)
-    ? crypto.randomUUID()
-    : Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return Date.now().toString(36) + '-' + (++_uidSeq).toString(36) + '-' + Math.random().toString(36).slice(2, 7);
 }
 
 function fmtDate(ts) {
@@ -1030,12 +1057,9 @@ async function lookupWiktionary(word, sig, res) {
       const content = (page && page.revisions && page.revisions[0] &&
                        (page.revisions[0]['*'] || page.revisions[0].content)) || '';
       if (content) {
-        /* Look for UK pronunciation first: {{a|UK}} ... {{IPA|en|/.../ */
-        let m = content.match(/\{\{a\|(?:UK|RP|British)[^}]*\}\}[^{]*\{\{IPA\|en\|([/\[][^|}\n]+)/i);
-        if (!m) {
-          /* Fall back to any {{IPA|en|/.../ */
-          m = content.match(/\{\{IPA\|en[^|]*\|([/\[][^|}\n]+)/);
-        }
+          // British/RP pronunciation first (WIKI_IPA_UK), then any IPA block (WIKI_IPA_ANY)
+          let m = content.match(WIKI_IPA_UK);
+          if (!m) m = content.match(WIKI_IPA_ANY);
         if (m) {
           const raw = m[1].trim();
           const clean = raw.match(/^[/\[].+?[/\]]/);
@@ -1480,8 +1504,19 @@ function renderStats() {
     rows.appendChild(row);
   });
 
-  /* Storage usage */
-  document.getElementById('storageUsed').textContent = storageUsedKB() + ' KB（约 5,120 KB 可用）';
+  /* Storage usage — try quota API, fall back to documented constant */
+  const usedKB = storageUsedKB();
+  const usedEl = document.getElementById('storageUsed');
+  if (navigator.storage && navigator.storage.estimate) {
+    navigator.storage.estimate().then(est => {
+      const quotaKB = Math.round((est.quota || LOCALSTORAGE_QUOTA_KB * 1024) / 1024);
+      usedEl.textContent = usedKB + ' KB（约 ' + quotaKB + ' KB 可用）';
+    }).catch(() => {
+      usedEl.textContent = usedKB + ' KB（约 ' + LOCALSTORAGE_QUOTA_KB + ' KB 可用）';
+    });
+  } else {
+    usedEl.textContent = usedKB + ' KB（约 ' + LOCALSTORAGE_QUOTA_KB + ' KB 可用）';
+  }
 }
 
 /* ─── Export / Import ─── */
